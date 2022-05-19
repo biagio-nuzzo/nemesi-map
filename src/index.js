@@ -14,7 +14,6 @@ root.render(
     <div className='generalContainer'>
       <Core />
     </div>
-
   </React.StrictMode>
 );
 
