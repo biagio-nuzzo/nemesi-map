@@ -11,7 +11,6 @@ import CustomMarker from "../../assets/images/tree.webp";
 import L from "leaflet";
 import axios from "axios";
 import Style from "./NemesiMap.module.css";
-import dataPolygon from "../../ConfiniProvinciali";
 import loader from "../../assets/images/loader.gif";
 
 function GetIcon(_iconSize) {
@@ -150,7 +149,7 @@ const NemesiMap = (props) => {
     getMarkerData();
   }, []);
 
-  const [mapBounds, setMapBounds] = useState(dataPolygon.features[0]);
+  const [mapBounds, setMapBounds] = useState();
 
   return (
     <React.Fragment>
