@@ -24,7 +24,7 @@ function chartFakeDataGenerator(numElements) {
 
   for (let i = 0; i < numElements; i++) {
     seriesList.push({
-      name: "Metabolita " + i+1,
+      name: "Metabolita " + (i+1),
       data: generateListofRandomNumbers(10),
     });
   }
