@@ -1,0 +1,18 @@
+.chartContainer{
+    width: 90%;
+    margin: auto;
+}
+
+
+.treeDescContainer div{
+    padding-right: 0px !important;
+}
+
+.treeDescContent{
+    margin-bottom: 25px !important;
+}
+
+.mapDescriptionContainer{
+    font-size: 20px;
+    font-weight: 200;
+}

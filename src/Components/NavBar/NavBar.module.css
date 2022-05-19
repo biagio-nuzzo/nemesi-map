@@ -1,0 +1,61 @@
+.topBarContainer {
+  margin-top: 30px;
+  align-items: center;
+}
+
+.topNavBar {
+  width: 100%;
+  background-color: black;
+  color: white;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.goBack {
+  margin-left: 20px;
+  margin-right: auto;
+}
+.goBack span {
+  margin-left: 5px;
+}
+
+.headerMenu {
+  margin-right: 20px;
+  margin-left: auto;
+}
+
+.menuBarContainer {
+  padding: 30px;
+}
+
+.menuLabel {
+  color: grey;
+  font-size: 17px;
+}
+
+.formMapType {
+  width: 100%;
+}
+
+.logoContainer {
+  padding: 0px !important;
+  width: 100%;
+  text-align: center;
+}
+
+.logoImage {
+  margin: auto;
+  width: 70%;
+  max-width: 280px;
+  height: 80%;
+}
+
+.tagStyle{
+  height: 30px !important;
+  padding: 5px !important;
+}
+
+.loaderContainer{
+  width: 100%;
+}
