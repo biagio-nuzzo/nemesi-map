@@ -1,7 +1,7 @@
 {
   "name": "nemesi-map",
   "version": "0.1.0",
-  "homepage": "https://gitname.github.io/nemesi-map/",
+  "homepage": "http://biagio-nuzzo.github.io/nemesi-map/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.0",
