@@ -14,7 +14,18 @@ const Core = () => {
         return list;
     }
 
-    function chartFakeDataGenerator() {
+    function chartFakeDataGenerator(numElements) {
+        const seriesList = []
+
+        for (let i = 0; i < numElements; i++) {
+            seriesList.push(
+                {
+                    name: "Metabolita " + i,
+                    data: generateListofRandomNumbers(10)
+                }
+            )
+        }
+
         const state = {
             options: {
                 chart: {
@@ -42,62 +53,24 @@ const Core = () => {
                     ],
                 },
             },
-
-            series: [
-                {
-                    name: "AV 1",
-                    data: generateListofRandomNumbers(9),
-                },
-                {
-                    name: "AV 2",
-                    data: generateListofRandomNumbers(9),
-                },
-                {
-                    name: "AV 3",
-                    data: generateListofRandomNumbers(9),
-                },
-                {
-                    name: "AV 4",
-                    data: generateListofRandomNumbers(9),
-                },
-                {
-                    name: "AV 5",
-                    data: generateListofRandomNumbers(9),
-                },
-                {
-                    name: "AV 6",
-                    data: generateListofRandomNumbers(9),
-                },
-                {
-                    name: "AV 7",
-                    data: generateListofRandomNumbers(9),
-                },
-                {
-                    name: "AV 8",
-                    data: generateListofRandomNumbers(9),
-                },
-                {
-                    name: "AV 9",
-                    data: generateListofRandomNumbers(9),
-                },
-            ],
+            series: seriesList,
         };
-
         return state;
     }
 
     const [treeSelected, setTreeSelected] = useState(0);
-    const [chartDataMetabolitics, setChartDataMetabolitics] = useState(chartFakeDataGenerator());
+    const [elNumber, setElNumber] = useState(0);
+    const [chartDataMetabolitics, setChartDataMetabolitics] = useState(chartFakeDataGenerator(elNumber));
 
     return (
         <React.Fragment>
-            <NavBar setChartDataMetabolitics={setChartDataMetabolitics} />
+            <NavBar setElNumber={setElNumber} setChartDataMetabolitics={setChartDataMetabolitics} />
             <Row>
                 <Col md={8} style={{ padding: "0px" }}>
                     <NemesiMap treeSelected={treeSelected} setTreeSelected={setTreeSelected} />
                 </Col>
                 <Col md={4} className="sideBarContainer" style={{ padding: "0px", borderTop: "2px solid black" }}>
-                    <TabSetSide chartDataMetabolitics={chartDataMetabolitics} treeSelected={treeSelected} />
+                    <TabSetSide elNumber={elNumber} chartDataMetabolitics={chartDataMetabolitics} treeSelected={treeSelected} />
                 </Col>
             </Row>
         </React.Fragment>

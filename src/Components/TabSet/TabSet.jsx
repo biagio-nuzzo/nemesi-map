@@ -74,12 +74,20 @@ export default function BasicTabs(props) {
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ReactApexChart
-          height="800px"
-          options={props.chartDataMetabolitics.options}
-          series={props.chartDataMetabolitics.series}
-          type="bar"
-        />
+        {props.chartDataMetabolitics.series.length > 0 ? (
+          <ReactApexChart
+            height="800px"
+            options={props.chartDataMetabolitics.options}
+            series={props.chartDataMetabolitics.series}
+            type="bar"
+          />
+        ) :
+        <div
+              className={Style.mapDescriptionContainer}
+              style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
+            >
+              Seleziona almeno un metabolita per visualizzare il grafico
+            </div>}
       </TabPanel>
       <TabPanel value={value} index={2}>
         <ReactApexChart

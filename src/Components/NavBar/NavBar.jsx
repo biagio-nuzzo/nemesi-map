@@ -14,85 +14,54 @@ import Chip from "@mui/material/Chip";
 function generateListofRandomNumbers(numberOfElements) {
   let list = [];
   for (let i = 0; i < numberOfElements; i++) {
-      list.push(Math.floor(Math.random() * 100));
+    list.push(Math.floor(Math.random() * 100));
   }
   return list;
 }
 
-function chartFakeDataGenerator() {
+function chartFakeDataGenerator(numElements) {
+  const seriesList = [];
+
+  for (let i = 0; i < numElements; i++) {
+    seriesList.push({
+      name: "Metabolita " + i+1,
+      data: generateListofRandomNumbers(10),
+    });
+  }
+
   const state = {
-      options: {
-          chart: {
-              id: "basic-bar",
-              type: "bar",
-              height: 400,
-              stacked: true,
-          },
-          plotOptions: {
-              bar: {
-                  horizontal: true,
-              },
-          },
-          xaxis: {
-              categories: [
-                  "AV 1",
-                  "AV 2",
-                  "AV 3",
-                  "AV 4",
-                  "AV 5",
-                  "AV 6",
-                  "AV 7",
-                  "AV 8",
-                  "AV 9",
-              ],
-          },
+    options: {
+      chart: {
+        id: "basic-bar",
+        type: "bar",
+        height: 400,
+        stacked: true,
       },
-
-      series: [
-          {
-              name: "AV 1",
-              data: generateListofRandomNumbers(9),
-          },
-          {
-              name: "AV 2",
-              data: generateListofRandomNumbers(9),
-          },
-          {
-              name: "AV 3",
-              data: generateListofRandomNumbers(9),
-          },
-          {
-              name: "AV 4",
-              data: generateListofRandomNumbers(9),
-          },
-          {
-              name: "AV 5",
-              data: generateListofRandomNumbers(9),
-          },
-          {
-              name: "AV 6",
-              data: generateListofRandomNumbers(9),
-          },
-          {
-              name: "AV 7",
-              data: generateListofRandomNumbers(9),
-          },
-          {
-              name: "AV 8",
-              data: generateListofRandomNumbers(9),
-          },
-          {
-              name: "AV 9",
-              data: generateListofRandomNumbers(9),
-          },
-      ],
+      plotOptions: {
+        bar: {
+          horizontal: true,
+        },
+      },
+      xaxis: {
+        categories: [
+          "AV 1",
+          "AV 2",
+          "AV 3",
+          "AV 4",
+          "AV 5",
+          "AV 6",
+          "AV 7",
+          "AV 8",
+          "AV 9",
+        ],
+      },
+    },
+    series: seriesList,
   };
-
   return state;
 }
 
 const NavBar = (props) => {
-
   const mapTypeDict = {
     attendance: {
       label: "Presenza di metaboliti",
@@ -219,7 +188,9 @@ const NavBar = (props) => {
                   value={tagColorList}
                   onChange={(event, newValue) => {
                     setTagColorList(newValue);
-                    props.setChartDataMetabolitics(chartFakeDataGenerator())
+                    props.setChartDataMetabolitics(
+                      chartFakeDataGenerator(newValue.length)
+                    );
                   }}
                   getOptionLabel={(option) => {
                     return option.title;
@@ -243,6 +214,9 @@ const NavBar = (props) => {
                         onDelete={() => {
                           setTagColorList(
                             value.filter((item) => item.key !== option.key)
+                          );
+                          props.setChartDataMetabolitics(
+                            chartFakeDataGenerator(value.length - 1)
                           );
                         }}
                       />

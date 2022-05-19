@@ -98,7 +98,6 @@ const CreateLayers = (props) => {
 };
 
 const CreateMarkers = (props) => {
-  console.log(props);
   const markersList = [];
   const map = useMap();
 
