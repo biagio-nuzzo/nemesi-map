@@ -60,6 +60,7 @@ const NemesiMap = (props) => {
         className={Style.mapBoxContainer + " mx-0"}
         style={{ position: "relative" }}
       >
+
         {municipalData && markerData && regionData && provinceData ? (
           <MapContainer
             onzoomend={(e) => {
@@ -107,6 +108,7 @@ const NemesiMap = (props) => {
             <img src={loader} alt="loader" />
           </div>
         )}
+
         {props.treeSelected && (
           <div className={Style.mapBoxPopup}>
             <div className={Style.markerPopupDiv}>

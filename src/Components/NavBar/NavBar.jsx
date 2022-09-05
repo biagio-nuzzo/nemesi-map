@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -130,6 +130,12 @@ const NavBar = (props) => {
     },
   ];
 
+  const [metabilit, setMetabilit] = useState(null);
+
+  // useEffect(() => {
+  //   // Chiamata api per ottenere lista metaboliti
+  // }, []);
+
   const [tagColorList, setTagColorList] = useState([]);
 
   return (
@@ -183,60 +189,62 @@ const NavBar = (props) => {
                 sx={{ width: "100%", marginLeft: "0px" }}
                 id="tag-controller"
               >
-                <Autocomplete
-                  multiple
-                  id="tags-standard"
-                  options={tmpDict}
-                  value={tagColorList}
-                  onChange={(event, newValue) => {
-                    setTagColorList(newValue);
-                    props.setChartDataMetabolitics(
-                      chartFakeDataGenerator(newValue.length)
-                    );
-                  }}
-                  getOptionLabel={(option) => {
-                    return option.title;
-                  }}
-                  isOptionEqualToValue={(option, value) => {
-                    return option.key === value.key;
-                  }}
-                  renderTags={(value) => {
-                    return value.map((option, index) => (
-                      <Chip
-                        key={index}
-                        className={Style.tagStyle}
-                        style={{
-                          backgroundColor: option.color,
-                          marginLeft: "6px",
-                        }}
-                        value={option}
-                        label={option.title}
-                        variant="outlined"
-                        size="small"
-                        onDelete={() => {
-                          setTagColorList(
-                            value.filter((item) => item.key !== option.key)
-                          );
-                          props.setChartDataMetabolitics(
-                            chartFakeDataGenerator(value.length - 1)
-                          );
-                        }}
-                      />
-                    ));
-                  }}
-                  renderInput={(params) => {
-                    return (
-                      <React.Fragment>
-                        <TextField
-                          style={{ marginTop: "20px" }}
-                          {...params}
-                          variant="standard"
-                          placeholder="Seleziona Metabolita"
+                {metabilit && (
+                  <Autocomplete
+                    multiple
+                    id="tags-standard"
+                    options={tmpDict}
+                    value={tagColorList}
+                    onChange={(event, newValue) => {
+                      setTagColorList(newValue);
+                      props.setChartDataMetabolitics(
+                        chartFakeDataGenerator(newValue.length)
+                      );
+                    }}
+                    getOptionLabel={(option) => {
+                      return option.title;
+                    }}
+                    isOptionEqualToValue={(option, value) => {
+                      return option.key === value.key;
+                    }}
+                    renderTags={(value) => {
+                      return value.map((option, index) => (
+                        <Chip
+                          key={index}
+                          className={Style.tagStyle}
+                          style={{
+                            backgroundColor: option.color,
+                            marginLeft: "6px",
+                          }}
+                          value={option}
+                          label={option.title}
+                          variant="outlined"
+                          size="small"
+                          onDelete={() => {
+                            setTagColorList(
+                              value.filter((item) => item.key !== option.key)
+                            );
+                            props.setChartDataMetabolitics(
+                              chartFakeDataGenerator(value.length - 1)
+                            );
+                          }}
                         />
-                      </React.Fragment>
-                    );
-                  }}
-                />
+                      ));
+                    }}
+                    renderInput={(params) => {
+                      return (
+                        <React.Fragment>
+                          <TextField
+                            style={{ marginTop: "20px" }}
+                            {...params}
+                            variant="standard"
+                            placeholder="Seleziona Metabolita"
+                          />
+                        </React.Fragment>
+                      );
+                    }}
+                  />
+                )}
               </Stack>
             </div>
           </Col>

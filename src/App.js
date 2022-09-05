@@ -57,9 +57,7 @@ const Core = () => {
             series: seriesList,
         };
         return state;
-    }
-
-    
+    }   
 
     const [treeSelected, setTreeSelected] = useState(0);
     const [elNumber, setElNumber] = useState(0);
@@ -74,7 +72,7 @@ const Core = () => {
                     <NemesiMap mapType={mapType} treeSelected={treeSelected} setTreeSelected={setTreeSelected} />
                 </Col>
                 <Col md={4} className="sideBarContainer" style={{ padding: "0px", borderTop: "2px solid black" }}>
-                    <TabSetSide elNumber={elNumber} chartDataMetabolitics={chartDataMetabolitics} treeSelected={treeSelected} />
+                    <TabSetSide mapType={mapType} elNumber={elNumber} chartDataMetabolitics={chartDataMetabolitics} treeSelected={treeSelected} />
                 </Col>
                 <Col md={8}>
                     <TreeTable />

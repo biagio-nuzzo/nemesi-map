@@ -58,19 +58,32 @@ export default function BasicTabs(props) {
       </Box>
       <TabPanel value={value} index={0} style={{ padding: "20px" }}>
         <div className={Style.mapDescriptionContainer}>
-          <span style={{ color: "black", fontWeight: 400 }}>
-            La mappa della presenza metabolitica
-          </span>
-          <br />
-          <p style={{ color: "grey" }}>
-            mostra le presenza sul territorio regionale dei metaboliti rilevati
-            sugli alberi analizzati tramite processi metabolomici
-            targeted/untargeted
-          </p>
-          <p style={{ color: "grey", marginTop: "25px" }}>
-            I dati riportati nella seguente mappa fanno riferimento all'ultimo
-            periodo disponibile rilevato
-          </p>
+          {props.mapType === "presence" ? (
+            <React.Fragment>
+              <span style={{ color: "black", fontWeight: 400 }}>
+                La mappa della presenza metabolitica
+              </span>
+              <br />
+              <p style={{ color: "grey" }}>
+                mostra le presenza sul territorio regionale dei metaboliti
+                rilevati sugli alberi analizzati tramite processi metabolomici
+                targeted/untargeted
+              </p>
+              <p style={{ color: "grey", marginTop: "25px" }}>
+                I dati riportati nella seguente mappa fanno riferimento
+                all'ultimo periodo disponibile rilevato
+              </p>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <span style={{ color: "black", fontWeight: 400 }}>
+                La mappa della concentrazione
+              </span>
+              <br />
+              <p style={{ color: "grey" }}>lorem</p>
+              <p style={{ color: "grey", marginTop: "25px" }}>lorem</p>
+            </React.Fragment>
+          )}
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -81,13 +94,14 @@ export default function BasicTabs(props) {
             series={props.chartDataMetabolitics.series}
             type="bar"
           />
-        ) :
-        <div
-              className={Style.mapDescriptionContainer}
-              style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
-            >
-              Seleziona almeno un metabolita per visualizzare il grafico
-            </div>}
+        ) : (
+          <div
+            className={Style.mapDescriptionContainer}
+            style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
+          >
+            Seleziona almeno un metabolita per visualizzare il grafico
+          </div>
+        )}
       </TabPanel>
       <TabPanel value={value} index={2}>
         <ReactApexChart
