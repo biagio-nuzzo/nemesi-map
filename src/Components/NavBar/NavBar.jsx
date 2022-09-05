@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Col, Row, Container } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
@@ -24,7 +24,7 @@ function chartFakeDataGenerator(numElements) {
 
   for (let i = 0; i < numElements; i++) {
     seriesList.push({
-      name: "Metabolita " + (i+1),
+      name: "Metabolita " + (i + 1),
       data: generateListofRandomNumbers(10),
     });
   }
@@ -63,9 +63,9 @@ function chartFakeDataGenerator(numElements) {
 
 const NavBar = (props) => {
   const mapTypeDict = {
-    attendance: {
+    presence: {
       label: "Presenza di metaboliti",
-      value: "attendance",
+      value: "presence",
     },
     concentration: {
       label: "Concentrazione di metaboliti",
@@ -130,7 +130,6 @@ const NavBar = (props) => {
     },
   ];
 
-  const [mapType, setMapType] = useState(mapTypeDict.attendance.value);
   const [tagColorList, setTagColorList] = useState([]);
 
   return (
@@ -159,11 +158,14 @@ const NavBar = (props) => {
                   style={{ fontSize: "19px" }}
                   labelId="map-type-select-label"
                   id="map-type-select-input"
-                  value={mapType}
+                  value={props.mapType}
                   label="asdasd"
+                  onChange={(e) => {
+                    props.setMapType(e.target.value);
+                  }}
                 >
-                  <MenuItem value={mapTypeDict.attendance.value}>
-                    {mapTypeDict.attendance.label}
+                  <MenuItem value={mapTypeDict.presence.value}>
+                    {mapTypeDict.presence.label}
                   </MenuItem>
                   <MenuItem value={mapTypeDict.concentration.value}>
                     {mapTypeDict.concentration.label}
@@ -240,6 +242,7 @@ const NavBar = (props) => {
           </Col>
           <Col sm={4} className={Style.logoContainer}>
             <img
+              alt="logo"
               className={Style.logoImage}
               src="http://nemesi-project.it/img/logo-nemesi.png"
             />

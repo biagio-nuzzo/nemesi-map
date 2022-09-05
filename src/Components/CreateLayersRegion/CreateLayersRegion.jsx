@@ -1,0 +1,27 @@
+import React from "react";
+import { GeoJSON } from "react-leaflet";
+
+const CreateLayersRegion = (props) => {
+  const layersList = [];
+
+  props.data.features.map((feature, index) => {
+    const tmpId = "polygonRegion" + index.toString();
+
+    layersList.push(
+      <GeoJSON
+        key={index}
+        style={{
+          className: tmpId,
+          weight: 3.5,
+          color: "#006A4E",
+          fillOpacity: 0,
+        }}
+        data={feature}
+      />
+    );
+  });
+
+  return layersList;
+};
+
+export default CreateLayersRegion;

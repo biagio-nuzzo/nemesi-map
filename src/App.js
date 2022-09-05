@@ -3,6 +3,7 @@ import { Col, Row } from 'react-bootstrap'
 import NemesiMap from './Components/NemesiMap/NemesiMap';
 import TabSetSide from './Components/TabSet/TabSet';
 import NavBar from './Components/NavBar/NavBar';
+import TreeTable from './Components/TreeTable/TreeTable';
 
 const Core = () => {
 
@@ -58,19 +59,25 @@ const Core = () => {
         return state;
     }
 
+    
+
     const [treeSelected, setTreeSelected] = useState(0);
     const [elNumber, setElNumber] = useState(0);
     const [chartDataMetabolitics, setChartDataMetabolitics] = useState(chartFakeDataGenerator(elNumber));
+    const [mapType, setMapType] = useState("presence");
 
     return (
         <React.Fragment>
-            <NavBar setElNumber={setElNumber} setChartDataMetabolitics={setChartDataMetabolitics} />
+            <NavBar mapType={mapType} setMapType={setMapType} setElNumber={setElNumber} setChartDataMetabolitics={setChartDataMetabolitics} />
             <Row>
                 <Col md={8} style={{ padding: "0px" }}>
-                    <NemesiMap treeSelected={treeSelected} setTreeSelected={setTreeSelected} />
+                    <NemesiMap mapType={mapType} treeSelected={treeSelected} setTreeSelected={setTreeSelected} />
                 </Col>
                 <Col md={4} className="sideBarContainer" style={{ padding: "0px", borderTop: "2px solid black" }}>
                     <TabSetSide elNumber={elNumber} chartDataMetabolitics={chartDataMetabolitics} treeSelected={treeSelected} />
+                </Col>
+                <Col md={8}>
+                    <TreeTable />
                 </Col>
             </Row>
         </React.Fragment>
