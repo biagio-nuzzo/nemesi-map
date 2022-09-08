@@ -118,8 +118,8 @@ const NemesiMap = (props) => {
               <p>
                 Cultivar:{" "}
                 <span style={{ fontWeight: "300" }}>
-                  {props.treeSelected.cultivar.name
-                    ? props.treeSelected.cultivar.name
+                  {props.treeSelected.cultivar.specie
+                    ? props.treeSelected.cultivar.specie
                     : "-"}
                 </span>
               </p>

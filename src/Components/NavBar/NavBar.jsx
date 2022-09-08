@@ -67,24 +67,19 @@ function chartFakeDataGenerator(numElements) {
 function chartDataGenerator(metabolits, cultivardata) {
 
   var categoriesList = [];
-
-  // for (var i = 0; i < cultivardata.cultivars.length; i++) {
-  //   categoriesList.push(cultivardata.cultivars[i].name);
-  // }
-
   var seriesList = [];
-  var series = {};
+
   for (let a = 0; a < metabolits.length; a++){
     for (let i = 0; i < cultivardata.cultivars.length; i++){
       for (let j = 0; j < cultivardata.cultivars[i].metabolits.length; j++){
         if (metabolits[a].cod_met === cultivardata.cultivars[i].metabolits[j].metabolit){
-          categoriesList.push(cultivardata.cultivars[i].name);
-          series = {
+          if (categoriesList.indexOf(cultivardata.cultivars[i].name) === -1){
+            categoriesList.push(cultivardata.cultivars[i].name);
+          }
+          seriesList.push({
             name: cultivardata.cultivars[i].metabolits[j].metabolit,
             data: [cultivardata.cultivars[i].metabolits[j].value],
-          };
-          seriesList.push(series);
-          series = {};
+          });
         }
       }
     }
@@ -110,7 +105,6 @@ function chartDataGenerator(metabolits, cultivardata) {
       },
     },
     series: seriesList,
-
   };
   return state;
 }
@@ -224,7 +218,6 @@ const NavBar = (props) => {
                           newValue,
                           cultivarData
                           ),
-                          console.log(newValue)
                       );
                     }}
                     getOptionLabel={(option) => {
