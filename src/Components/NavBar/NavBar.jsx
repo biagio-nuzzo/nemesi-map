@@ -11,6 +11,8 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Style from "./NavBar.module.css";
 import Chip from "@mui/material/Chip";
 
+import axios from "axios";
+
 function generateListofRandomNumbers(numberOfElements) {
   let list = [];
   for (let i = 0; i < numberOfElements; i++) {
@@ -28,6 +30,7 @@ function chartFakeDataGenerator(numElements) {
       data: generateListofRandomNumbers(10),
     });
   }
+  
 
   const state = {
     options: {
@@ -61,6 +64,57 @@ function chartFakeDataGenerator(numElements) {
   return state;
 }
 
+function chartDataGenerator(metabolits, cultivardata) {
+
+  var categoriesList = [];
+
+  // for (var i = 0; i < cultivardata.cultivars.length; i++) {
+  //   categoriesList.push(cultivardata.cultivars[i].name);
+  // }
+
+  var seriesList = [];
+  var series = {};
+  for (let a = 0; a < metabolits.length; a++){
+    for (let i = 0; i < cultivardata.cultivars.length; i++){
+      for (let j = 0; j < cultivardata.cultivars[i].metabolits.length; j++){
+        if (metabolits[a].cod_met === cultivardata.cultivars[i].metabolits[j].metabolit){
+          categoriesList.push(cultivardata.cultivars[i].name);
+          series = {
+            name: cultivardata.cultivars[i].metabolits[j].metabolit,
+            data: [cultivardata.cultivars[i].metabolits[j].value],
+          };
+          seriesList.push(series);
+          series = {};
+        }
+      }
+    }
+  }
+
+  
+
+    const state = {
+    options: {
+      chart: {
+        id: "basic-bar",
+        type: "bar",
+        height: 800,
+        stacked: true,
+      },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+        },
+      },
+      xaxis: {
+        categories: categoriesList,
+      },
+    },
+    series: seriesList,
+
+  };
+  return state;
+}
+
 const NavBar = (props) => {
   const mapTypeDict = {
     presence: {
@@ -73,70 +127,38 @@ const NavBar = (props) => {
     },
   };
 
-  const tmpDict = [
-    {
-      key: 1,
-      title: "Metaboliti 1",
-      label: "metaboliti 1",
-      color: "#a6cee3",
-    },
-    {
-      key: 2,
-      title: "Metaboliti 2",
-      label: "metaboliti 2",
-      color: "#1f78b4",
-    },
-    {
-      key: 3,
-      title: "Metaboliti 3",
-      label: "metaboliti 3",
-      color: "#b2df8a",
-    },
-    {
-      key: 4,
-      title: "Metaboliti 4",
-      label: "metaboliti 4",
-      color: "#33a02c",
-    },
-    {
-      key: 5,
-      title: "Metaboliti 5",
-      label: "metaboliti 5",
-      color: "#ff7f00",
-    },
-    {
-      key: 6,
-      title: "Metaboliti 6",
-      label: "metaboliti 6",
-      color: "#cab2d6",
-    },
-    {
-      key: 7,
-      title: "Metaboliti 7",
-      label: "metaboliti 7",
-      color: "#6a3d9a",
-    },
-    {
-      key: 8,
-      title: "Metaboliti 8",
-      label: "metaboliti 8",
-      color: "#ffff99",
-    },
-    {
-      key: 9,
-      title: "Metaboliti 9",
-      label: "metaboliti 9",
-      color: "#b15928",
-    },
-  ];
 
-  const [metabilit, setMetabilit] = useState(null);
+  const [metabolitList, setMetabolitList] = useState([]);
 
-  // useEffect(() => {
-  //   // Chiamata api per ottenere lista metaboliti
-  // }, []);
+  const [cultivarData, setCultivarData] = useState([]);
 
   const [tagColorList, setTagColorList] = useState([]);
+  
+  useEffect(() => {
+    const getMetabolits = async () => {
+      const response = await axios.get(
+        "http://nemesi-project.it/api/v1/metabolits/?format=json"
+      );
+      setMetabolitList(response.data);
+    };
+
+    const getCultivardata = async () => {
+      const response = await axios.get(
+        "http://nemesi-project.it/api/v1/cultivar-data/?format=json"
+      );
+      setCultivarData(response.data);
+      // console.log(response.data.cultivars[0].metabolits);
+    };
+
+    const getTagColorList = async () => {
+      const colorList = [];
+      setTagColorList(colorList);
+    };
+
+    getMetabolits();
+    getCultivardata();
+    getTagColorList();    
+  }, []);
 
   return (
     <React.Fragment>
@@ -189,23 +211,27 @@ const NavBar = (props) => {
                 sx={{ width: "100%", marginLeft: "0px" }}
                 id="tag-controller"
               >
-                {metabilit && (
+                { metabolitList && (
                   <Autocomplete
                     multiple
                     id="tags-standard"
-                    options={tmpDict}
+                    options={metabolitList}
                     value={tagColorList}
                     onChange={(event, newValue) => {
                       setTagColorList(newValue);
                       props.setChartDataMetabolitics(
-                        chartFakeDataGenerator(newValue.length)
+                        chartDataGenerator(
+                          newValue,
+                          cultivarData
+                          ),
+                          console.log(newValue)
                       );
                     }}
                     getOptionLabel={(option) => {
-                      return option.title;
+                      return "Metabolita " + option.cod_met;
                     }}
                     isOptionEqualToValue={(option, value) => {
-                      return option.key === value.key;
+                      return option.cod_met === value.cod_met;
                     }}
                     renderTags={(value) => {
                       return value.map((option, index) => (
@@ -217,18 +243,22 @@ const NavBar = (props) => {
                             marginLeft: "6px",
                           }}
                           value={option}
-                          label={option.title}
+                          label={"Metabolita " + option.cod_met}
                           variant="outlined"
                           size="small"
-                          onDelete={() => {
-                            setTagColorList(
-                              value.filter((item) => item.key !== option.key)
-                            );
+                          onDelete={value.length > 0 ? () => {
+                            const newTagColorList = [...tagColorList];
+                            newTagColorList.splice(index, 1);
+                            setTagColorList(newTagColorList);
                             props.setChartDataMetabolitics(
-                              chartFakeDataGenerator(value.length - 1)
+                              chartDataGenerator(
+                                newTagColorList,
+                                cultivarData
+                                ),
+                                console.log(newTagColorList)
                             );
-                          }}
-                        />
+                          } : null}
+                          />
                       ));
                     }}
                     renderInput={(params) => {
@@ -248,8 +278,8 @@ const NavBar = (props) => {
               </Stack>
             </div>
           </Col>
-          <Col sm={4} className={Style.logoContainer}>
-            <img
+          <Col sm={4} className={Style.logoContainer} style={{ width: "33%" }}>
+            <img 
               alt="logo"
               className={Style.logoImage}
               src="http://nemesi-project.it/img/logo-nemesi.png"
