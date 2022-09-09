@@ -109,6 +109,23 @@ function chartDataGenerator(metabolits, cultivardata) {
   return state;
 }
 
+function RandomColor(){
+  const colorpool = ['#a6cee3',
+    '#1f78b4',
+    '#b2df8a',
+    '#33a02c',
+    '#fb9a99',
+    '#e31a1c',
+    '#fdbf6f',
+    '#ff7f00',
+    '#cab2d6',
+    '#6a3d9a',
+    '#ffff99',
+    '#b15928'
+  ];
+  return colorpool[Math.floor(Math.random() * colorpool.length)];
+}
+
 const NavBar = (props) => {
   const mapTypeDict = {
     presence: {
@@ -151,7 +168,8 @@ const NavBar = (props) => {
 
     getMetabolits();
     getCultivardata();
-    getTagColorList();    
+    getTagColorList();
+
   }, []);
 
   return (
@@ -184,6 +202,7 @@ const NavBar = (props) => {
                   label="asdasd"
                   onChange={(e) => {
                     props.setMapType(e.target.value);
+                    props.setChartDataMetabolitics([]);
                   }}
                 >
                   <MenuItem value={mapTypeDict.presence.value}>
@@ -211,13 +230,21 @@ const NavBar = (props) => {
                     id="tags-standard"
                     options={metabolitList}
                     value={tagColorList}
+                    getOptionDisabled={(option) =>
+                      tagColorList.length >= 12
+                    }
                     onChange={(event, newValue) => {
-                      setTagColorList(newValue);
+                      setTagColorList(
+                        newValue.map((item) => {
+                          return {
+                            ...item,
+                            color: RandomColor(),
+                          };
+                        })
+                      );
                       props.setChartDataMetabolitics(
-                        chartDataGenerator(
-                          newValue,
-                          cultivarData
-                          ),
+                        chartDataGenerator(newValue, cultivarData),
+                        []
                       );
                     }}
                     getOptionLabel={(option) => {
