@@ -64,69 +64,25 @@ function chartFakeDataGenerator(numElements) {
   return state;
 }
 
-function chartDataGenerator(metabolits, cultivardata) {
-
-  var categoriesList = [];
-  var seriesList = [];
-
-  for (let a = 0; a < metabolits.length; a++){
-    for (let i = 0; i < cultivardata.cultivars.length; i++){
-      for (let j = 0; j < cultivardata.cultivars[i].metabolits.length; j++){
-        if (metabolits[a].cod_met === cultivardata.cultivars[i].metabolits[j].metabolit){
-          if (categoriesList.indexOf(cultivardata.cultivars[i].name) === -1){
-            categoriesList.push(cultivardata.cultivars[i].name);
-          }
-          seriesList.push({
-            name: cultivardata.cultivars[i].metabolits[j].metabolit,
-            data: [cultivardata.cultivars[i].metabolits[j].value],
-          });
-        }
-      }
-    }
-  }
-
-  
-
-    const state = {
-    options: {
-      chart: {
-        id: "basic-bar",
-        type: "bar",
-        height: 800,
-        stacked: true,
-      },
-      plotOptions: {
-        bar: {
-          horizontal: true,
-        },
-      },
-      xaxis: {
-        categories: categoriesList,
-      },
-    },
-    series: seriesList,
-  };
-  return state;
-}
-
-function RandomColor(){
-  const colorpool = ['#a6cee3',
-    '#1f78b4',
-    '#b2df8a',
-    '#33a02c',
-    '#fb9a99',
-    '#e31a1c',
-    '#fdbf6f',
-    '#ff7f00',
-    '#cab2d6',
-    '#6a3d9a',
-    '#ffff99',
-    '#b15928'
-  ];
-  return colorpool[Math.floor(Math.random() * colorpool.length)];
-}
 
 const NavBar = (props) => {
+  
+  
+  const getChartData = async (value) => {
+            
+    props.setChartDataMetabolitics(null);
+    
+      await axios
+      .get("http://nemesi-project.it/api/v1/cultivar-chart/?metabolites=" + value)
+      .then((response) => {
+
+          props.setChartDataMetabolitics(response.data);
+        })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  };
+  
   const mapTypeDict = {
     presence: {
       label: "Presenza di metaboliti",
@@ -138,39 +94,76 @@ const NavBar = (props) => {
     },
   };
 
+  const tmpDict = [
+    {
+      key: 1,
+      title: "Metaboliti 1",
+      label: "metaboliti 1",
+      color: "#a6cee3",
+    },
+    {
+      key: 2,
+      title: "Metaboliti 2",
+      label: "metaboliti 2",
+      color: "#1f78b4",
+    },
+    {
+      key: 3,
+      title: "Metaboliti 3",
+      label: "metaboliti 3",
+      color: "#b2df8a",
+    },
+    {
+      key: 4,
+      title: "Metaboliti 4",
+      label: "metaboliti 4",
+      color: "#33a02c",
+    },
+    {
+      key: 5,
+      title: "Metaboliti 5",
+      label: "metaboliti 5",
+      color: "#ff7f00",
+    },
+    {
+      key: 6,
+      title: "Metaboliti 6",
+      label: "metaboliti 6",
+      color: "#cab2d6",
+    },
+    {
+      key: 7,
+      title: "Metaboliti 7",
+      label: "metaboliti 7",
+      color: "#6a3d9a",
+    },
+    {
+      key: 8,
+      title: "Metaboliti 8",
+      label: "metaboliti 8",
+      color: "#ffff99",
+    },
+    {
+      key: 9,
+      title: "Metaboliti 9",
+      label: "metaboliti 9",
+      color: "#b15928",
+    },
+  ];
 
   const [metabolitList, setMetabolitList] = useState([]);
 
-  const [cultivarData, setCultivarData] = useState([]);
-
-  const [tagColorList, setTagColorList] = useState([]);
-  
   useEffect(() => {
-    const getMetabolits = async () => {
-      const response = await axios.get(
-        "http://nemesi-project.it/api/v1/metabolits/?format=json"
-      );
-      setMetabolitList(response.data);
-    };
+      const getMetabolits = async () => {
+        const response = await axios.get(
+          "http://nemesi-project.it/api/v1/metabolits/?format=json"
+        );
+        setMetabolitList(response.data);
+      };
+      getMetabolits();
+    }, []);
 
-    const getCultivardata = async () => {
-      const response = await axios.get(
-        "http://nemesi-project.it/api/v1/cultivar-data/?format=json"
-      );
-      setCultivarData(response.data);
-      // console.log(response.data.cultivars[0].metabolits);
-    };
-
-    const getTagColorList = async () => {
-      const colorList = [];
-      setTagColorList(colorList);
-    };
-
-    getMetabolits();
-    getCultivardata();
-    getTagColorList();
-
-  }, []);
+    const [tagColorList, setTagColorList] = useState([]);
 
   return (
     <React.Fragment>
@@ -224,7 +217,7 @@ const NavBar = (props) => {
                 sx={{ width: "100%", marginLeft: "0px" }}
                 id="tag-controller"
               >
-                { metabolitList && (
+                {metabolitList && (
                   <Autocomplete
                     multiple
                     id="tags-standard"
@@ -234,18 +227,15 @@ const NavBar = (props) => {
                       tagColorList.length >= 12
                     }
                     onChange={(event, newValue) => {
-                      setTagColorList(
-                        newValue.map((item) => {
-                          return {
-                            ...item,
-                            color: RandomColor(),
-                          };
-                        })
-                      );
-                      props.setChartDataMetabolitics(
-                        chartDataGenerator(newValue, cultivarData),
-                        []
-                      );
+                      var metaList = [];
+                      for (let i = 0; i < newValue.length; i++) {
+                        metaList.push(newValue[i].id);
+                        console.log(metaList.toString());
+                        props.setChartDataMetabolitics(
+                          getChartData(metaList.toString())
+                        );
+                      }
+                      setTagColorList(newValue);
                     }}
                     getOptionLabel={(option) => {
                       return "Metabolita " + option.cod_met;
@@ -266,19 +256,17 @@ const NavBar = (props) => {
                           label={"Metabolita " + option.cod_met}
                           variant="outlined"
                           size="small"
-                          onDelete={value.length > 0 ? () => {
-                            const newTagColorList = [...tagColorList];
-                            newTagColorList.splice(index, 1);
-                            setTagColorList(newTagColorList);
-                            props.setChartDataMetabolitics(
-                              chartDataGenerator(
-                                newTagColorList,
-                                cultivarData
-                                ),
-                                console.log(newTagColorList)
+                          onDelete={() => {
+                            setTagColorList(
+                              value.filter((item) => item.cod_met !== option.cod_met)
                             );
-                          } : null}
-                          />
+                            props.setChartDataMetabolitics(
+                              getChartData(
+                                value.filter((item) => item.cod_met !== option.cod_met)
+                              )
+                            );
+                          }}
+                        />
                       ));
                     }}
                     renderInput={(params) => {

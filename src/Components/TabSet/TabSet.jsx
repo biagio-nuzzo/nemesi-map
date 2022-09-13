@@ -6,6 +6,8 @@ import Box from "@mui/material/Box";
 import Style from "./TabSet.module.css";
 import ReactApexChart from "react-apexcharts";
 
+import { TailSpin } from 'react-loading-icons'
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -87,12 +89,22 @@ export default function BasicTabs(props) {
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {props.chartDataMetabolitics.series.length > 0 ? (
+
+      {props.chartDataMetabolitics !== null ? (
           <ReactApexChart
             height="800px"
             options={props.chartDataMetabolitics.options}
             series={props.chartDataMetabolitics.series}
             type="bar"
+            stacked="true"
+          />
+        ) : props.chartDataMetabolitics.series.length > 0 ? (
+          <ReactApexChart
+            height="800px"
+            options={props.chartDataMetabolitics.options}
+            series={props.chartDataMetabolitics.series}
+            type="bar"
+            stacked="true"
           />
         ) : (
           <div
@@ -119,7 +131,7 @@ export default function BasicTabs(props) {
                 {"AV " + props.treeSelected.id}
               </p>
               <p style={{ fontSize: "18px", fontWeight: 300 }}>
-                Cultivar: fieldname
+                {"Cultivar: " + props.treeSelected.cultivar.specie}
               </p>
               <p style={{ fontSize: "18px", fontWeight: 300 }}>
                 {"Età: " + props.treeSelected.age}
