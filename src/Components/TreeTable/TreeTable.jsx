@@ -51,6 +51,7 @@ const TreeTable = () => {
             id: 1,
             username: "@MUI",
             age: 20,
+            Metabolita: "Metabolita 1",
           },
         ]}
         components={{ Toolbar: GridToolbar }}

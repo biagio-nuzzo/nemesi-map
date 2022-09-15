@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Style from "./TabSet.module.css";
 import ReactApexChart from "react-apexcharts";
 
-import { TailSpin } from 'react-loading-icons'
+import { TailSpin } from "react-loading-icons";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -88,41 +88,45 @@ export default function BasicTabs(props) {
           )}
         </div>
       </TabPanel>
-      <TabPanel value={value} index={1}>
-
-      {props.chartDataMetabolitics !== null ? (
+      {/* <TabPanel value={value} index={1}> */}
+        {/* {props.chartDataMetabolitics !== null ? (
           <ReactApexChart
             height="800px"
             options={props.chartDataMetabolitics.options}
             series={props.chartDataMetabolitics.series}
             type="bar"
+            horizontal="true"
             stacked="true"
           />
-        ) : props.chartDataMetabolitics.series.length > 0 ? (
-          <ReactApexChart
-            height="800px"
-            options={props.chartDataMetabolitics.options}
-            series={props.chartDataMetabolitics.series}
-            type="bar"
-            stacked="true"
-          />
+        ) : props.isLoadingCultivar ? (
+          <div
+            className={Style.loadingContainer}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <TailSpin stroke="#000" strokeOpacity={1} />
+          </div>
         ) : (
           <div
             className={Style.mapDescriptionContainer}
             style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
           >
-            Seleziona almeno un metabolita per visualizzare il grafico
+            Seleziona un metabolita valido per visualizzare il grafico
           </div>
-        )}
-      </TabPanel>
-      <TabPanel value={value} index={2}>
+        )} */}
+      {/* </TabPanel> */}
+      {/* <TabPanel value={value} index={2}>
         <ReactApexChart
           height="800px"
           options={props.chartDataMetabolitics.options}
           series={props.chartDataMetabolitics.series}
           type="bar"
         />
-      </TabPanel>
+      </TabPanel> */}
       <TabPanel className={Style.treeDescContainer} value={value} index={3}>
         {props.treeSelected ? (
           <React.Fragment>

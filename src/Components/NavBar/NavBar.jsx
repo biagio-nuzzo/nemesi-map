@@ -13,25 +13,7 @@ import Chip from "@mui/material/Chip";
 
 import axios from "axios";
 
-function generateListofRandomNumbers(numberOfElements) {
-  let list = [];
-  for (let i = 0; i < numberOfElements; i++) {
-    list.push(Math.floor(Math.random() * 100));
-  }
-  return list;
-}
-
-function chartFakeDataGenerator(numElements) {
-  const seriesList = [];
-
-  for (let i = 0; i < numElements; i++) {
-    seriesList.push({
-      name: "Metabolita " + (i + 1),
-      data: generateListofRandomNumbers(10),
-    });
-  }
-  
-
+function chartFakeDataGenerator() {
   const state = {
     options: {
       chart: {
@@ -46,43 +28,75 @@ function chartFakeDataGenerator(numElements) {
         },
       },
       xaxis: {
-        categories: [
-          "AV 1",
-          "AV 2",
-          "AV 3",
-          "AV 4",
-          "AV 5",
-          "AV 6",
-          "AV 7",
-          "AV 8",
-          "AV 9",
-        ],
+        categories: [],
       },
     },
-    series: seriesList,
+    series: [],
   };
   return state;
 }
 
-
 const NavBar = (props) => {
-  
-  
   const getChartData = async (value) => {
-            
-    props.setChartDataMetabolitics(null);
-    
+    if (value.length > 0) {
+      props.setIsLoadingCultivar(true);
       await axios
-      .get("http://nemesi-project.it/api/v1/cultivar-chart/?metabolites=" + value)
-      .then((response) => {
-
-          props.setChartDataMetabolitics(response.data);
+        .get(
+          "http://nemesi-project.it/api/v1/cultivar-chart/?metabolites=" + value
+        )
+        .then((response) => {
+          console.log(response.data);
+          const state = {
+            options: {
+              chart: {
+                id: "basic-bar",
+                type: "bar",
+                height: 400,
+                stacked: true,
+              },
+              plotOptions: {
+                bar: {
+                  horizontal: true,
+                },
+              },
+              xaxis: {
+                categories: response.data.options.xaxis.categories,
+              },
+            },
+            series: response.data.series,
+          };
+          console.log(state);
+          props.setChartDataMetabolitics(state);
         })
+        .catch((error) => {
+          console.log(error.response);
+        })
+        .finally(() => {
+          props.setIsLoadingCultivar(false);
+        });
+        ;
+    } else {
+      if ( props.chartDataMetabolitics !== null) {
+        props.setChartDataMetabolitics(null);
+      }
+    }
+  };
+
+  const getTableData = async () => {
+    // props.setTableDataMetabolitics(null);
+    await axios
+      .get("http://nemesi-project.it/api/v1/analysis-metabolit/?format=json")
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.results.length < response.data.count) {
+          props.setTableDataMetabolitics(response.data.results);
+        }
+      })
       .catch((error) => {
         console.log(error.response);
       });
   };
-  
+
   const mapTypeDict = {
     presence: {
       label: "Presenza di metaboliti",
@@ -154,16 +168,16 @@ const NavBar = (props) => {
   const [metabolitList, setMetabolitList] = useState([]);
 
   useEffect(() => {
-      const getMetabolits = async () => {
-        const response = await axios.get(
-          "http://nemesi-project.it/api/v1/metabolits/?format=json"
-        );
-        setMetabolitList(response.data);
-      };
-      getMetabolits();
-    }, []);
+    const getMetabolits = async () => {
+      const response = await axios.get(
+        "http://nemesi-project.it/api/v1/metabolits/?format=json"
+      );
+      setMetabolitList(response.data);
+    };
+    getMetabolits();
+  }, []);
 
-    const [tagColorList, setTagColorList] = useState([]);
+  const [tagColorList, setTagColorList] = useState([]);
 
   return (
     <React.Fragment>
@@ -223,18 +237,17 @@ const NavBar = (props) => {
                     id="tags-standard"
                     options={metabolitList}
                     value={tagColorList}
-                    getOptionDisabled={(option) =>
-                      tagColorList.length >= 12
-                    }
+                    getOptionDisabled={(option) => tagColorList.length >= 12}
                     onChange={(event, newValue) => {
                       var metaList = [];
+                      // getTableData();
                       for (let i = 0; i < newValue.length; i++) {
                         metaList.push(newValue[i].id);
-                        console.log(metaList.toString());
                         props.setChartDataMetabolitics(
                           getChartData(metaList.toString())
                         );
                       }
+
                       setTagColorList(newValue);
                     }}
                     getOptionLabel={(option) => {
@@ -257,12 +270,18 @@ const NavBar = (props) => {
                           variant="outlined"
                           size="small"
                           onDelete={() => {
-                            setTagColorList(
-                              value.filter((item) => item.cod_met !== option.cod_met)
-                            );
+                            var metaList = [];
+                            for (let i = 0; i < tagColorList.length; i++) {
+                              if (tagColorList[i].id !== option.id) {
+                                metaList.push(tagColorList[i].id);
+                              }
+                            }
                             props.setChartDataMetabolitics(
-                              getChartData(
-                                value.filter((item) => item.cod_met !== option.cod_met)
+                              getChartData(metaList.toString())
+                            );
+                            setTagColorList(
+                              tagColorList.filter(
+                                (item) => item.id !== option.id
                               )
                             );
                           }}
@@ -287,7 +306,7 @@ const NavBar = (props) => {
             </div>
           </Col>
           <Col sm={4} className={Style.logoContainer} style={{ width: "33%" }}>
-            <img 
+            <img
               alt="logo"
               className={Style.logoImage}
               src="http://nemesi-project.it/img/logo-nemesi.png"
