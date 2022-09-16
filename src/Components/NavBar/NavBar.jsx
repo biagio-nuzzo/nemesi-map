@@ -13,28 +13,28 @@ import Chip from "@mui/material/Chip";
 
 import axios from "axios";
 
-function chartFakeDataGenerator() {
-  const state = {
-    options: {
-      chart: {
-        id: "basic-bar",
-        type: "bar",
-        height: 400,
-        stacked: true,
-      },
-      plotOptions: {
-        bar: {
-          horizontal: true,
-        },
-      },
-      xaxis: {
-        categories: [],
-      },
-    },
-    series: [],
-  };
-  return state;
-}
+// function chartFakeDataGenerator() {
+//   const state = {
+//     options: {
+//       chart: {
+//         id: "basic-bar",
+//         type: "bar",
+//         height: 400,
+//         stacked: true,
+//       },
+//       plotOptions: {
+//         bar: {
+//           horizontal: true,
+//         },
+//       },
+//       xaxis: {
+//         categories: [],
+//       },
+//     },
+//     series: [],
+//   };
+//   return state;
+// }
 
 const NavBar = (props) => {
   const getChartData = async (value) => {
@@ -49,7 +49,6 @@ const NavBar = (props) => {
             props.setIsLoadingCultivar(false);
             return;
           }
-
           const state = {
             options: {
               chart: {
@@ -86,19 +85,50 @@ const NavBar = (props) => {
     }
   };
 
-  const getTableData = async () => {
-    // props.setTableDataMetabolitics(null);
-    await axios
-      .get("http://nemesi-project.it/api/v1/analysis-metabolit/?format=json")
-      .then((response) => {
-        console.log(response.data);
-        if (response.data.results.length < response.data.count) {
-          props.setTableDataMetabolitics(response.data.results);
-        }
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
+  const getTreeData = async (value) => {
+    if (value.length > 0) {
+      await axios
+        .get("http://nemesi-project.it/api/v1/tree-chart/?metabolites=" + value)
+        .then((response) => {
+          if (value.length === 1 && response.data.series.length === 0) {
+            props.setChartDataTree(null);
+            props.setIsLoadingCultivar(false);
+            return;
+          }
+          const state = {
+            options: {
+              chart: {
+                id: "basic-bar",
+                type: "bar",
+                height: 400,
+                stacked: true,
+              },
+              plotOptions: {
+                bar: {
+                  horizontal: true,
+                },
+              },
+              xaxis: {
+                categories: response.data.options.xaxis.categories,
+              },
+            },
+            series: response.data.series,
+          };
+          props.setChartDataTree(state);
+          props.setIsLoadingCultivar(false);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        })
+        .finally(() => {
+          props.setIsLoadingCultivar(false);
+        });
+    } else {
+      if (props.chartDataTree !== null) {
+        props.setChartDataTree(null);
+        props.setIsLoadingCultivar(false);
+      }
+    }
   };
 
   const mapTypeDict = {
@@ -112,62 +142,62 @@ const NavBar = (props) => {
     },
   };
 
-  const tmpDict = [
-    {
-      key: 1,
-      title: "Metaboliti 1",
-      label: "metaboliti 1",
-      color: "#a6cee3",
-    },
-    {
-      key: 2,
-      title: "Metaboliti 2",
-      label: "metaboliti 2",
-      color: "#1f78b4",
-    },
-    {
-      key: 3,
-      title: "Metaboliti 3",
-      label: "metaboliti 3",
-      color: "#b2df8a",
-    },
-    {
-      key: 4,
-      title: "Metaboliti 4",
-      label: "metaboliti 4",
-      color: "#33a02c",
-    },
-    {
-      key: 5,
-      title: "Metaboliti 5",
-      label: "metaboliti 5",
-      color: "#ff7f00",
-    },
-    {
-      key: 6,
-      title: "Metaboliti 6",
-      label: "metaboliti 6",
-      color: "#cab2d6",
-    },
-    {
-      key: 7,
-      title: "Metaboliti 7",
-      label: "metaboliti 7",
-      color: "#6a3d9a",
-    },
-    {
-      key: 8,
-      title: "Metaboliti 8",
-      label: "metaboliti 8",
-      color: "#ffff99",
-    },
-    {
-      key: 9,
-      title: "Metaboliti 9",
-      label: "metaboliti 9",
-      color: "#b15928",
-    },
-  ];
+  // const tmpDict = [
+  //   {
+  //     key: 1,
+  //     title: "Metaboliti 1",
+  //     label: "metaboliti 1",
+  //     color: "#a6cee3",
+  //   },
+  //   {
+  //     key: 2,
+  //     title: "Metaboliti 2",
+  //     label: "metaboliti 2",
+  //     color: "#1f78b4",
+  //   },
+  //   {
+  //     key: 3,
+  //     title: "Metaboliti 3",
+  //     label: "metaboliti 3",
+  //     color: "#b2df8a",
+  //   },
+  //   {
+  //     key: 4,
+  //     title: "Metaboliti 4",
+  //     label: "metaboliti 4",
+  //     color: "#33a02c",
+  //   },
+  //   {
+  //     key: 5,
+  //     title: "Metaboliti 5",
+  //     label: "metaboliti 5",
+  //     color: "#ff7f00",
+  //   },
+  //   {
+  //     key: 6,
+  //     title: "Metaboliti 6",
+  //     label: "metaboliti 6",
+  //     color: "#cab2d6",
+  //   },
+  //   {
+  //     key: 7,
+  //     title: "Metaboliti 7",
+  //     label: "metaboliti 7",
+  //     color: "#6a3d9a",
+  //   },
+  //   {
+  //     key: 8,
+  //     title: "Metaboliti 8",
+  //     label: "metaboliti 8",
+  //     color: "#ffff99",
+  //   },
+  //   {
+  //     key: 9,
+  //     title: "Metaboliti 9",
+  //     label: "metaboliti 9",
+  //     color: "#b15928",
+  //   },
+  // ];
 
   const [metabolitList, setMetabolitList] = useState([]);
 
@@ -214,6 +244,7 @@ const NavBar = (props) => {
                   onChange={(e) => {
                     props.setMapType(e.target.value);
                     props.setChartDataMetabolitics(null);
+                    props.setChartDataTree(null);
                   }}
                 >
                   <MenuItem value={mapTypeDict.presence.value}>
@@ -250,6 +281,7 @@ const NavBar = (props) => {
                         tmpList.push(newValue[i].id).toString();
                       }
                       getChartData(tmpList);
+                      getTreeData(tmpList);
                     }}
                     getOptionLabel={(option) => {
                       return "Metabolita " + option.cod_met;
@@ -281,6 +313,7 @@ const NavBar = (props) => {
                               tmpList2.push(tmpList[i].id).toString();
                             }
                             getChartData(tmpList2);
+                            getTreeData(tmpList2);
                           }}
                         />
                       ));

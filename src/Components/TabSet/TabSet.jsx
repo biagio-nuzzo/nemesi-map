@@ -91,14 +91,22 @@ export default function BasicTabs(props) {
       <TabPanel value={value} index={1}>
         {props.chartDataMetabolitics !== null ? (
           <ReactApexChart
-            height="400px"
+            height="750px"
             options={props.chartDataMetabolitics.options}
             series={props.chartDataMetabolitics.series}
             type="bar"
           />
         ) : props.isLoadingCultivar ? (
-          <div className={Style.loadingContainer}
-          style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center"}}>
+          <div
+            className={Style.loadingContainer}
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              alignContent: "center",
+            }}
+          >
             <TailSpin stroke="#000" strokeOpacity={1} />
           </div>
         ) : (
@@ -110,14 +118,27 @@ export default function BasicTabs(props) {
           </div>
         )}
       </TabPanel>
-      {/* <TabPanel value={value} index={2}>
-        {props.chartDataMetabolitics !== null ? (
-        <ReactApexChart
-          height="800px"
-          options={props.chartDataMetabolitics.options}
-          series={props.chartDataMetabolitics.series}
-          type="bar"
-        />
+      <TabPanel value={value} index={2}>
+        {props.chartDataTree !== null ? (
+          <ReactApexChart
+            height="750px"
+            options={props.chartDataTree.options}
+            series={props.chartDataTree.series}
+            type="bar"
+          />
+        ) : props.isLoadingCultivar ? (
+          <div
+            className={Style.loadingContainer}
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              alignContent: "center",
+            }}
+          >
+            <TailSpin stroke="#000" strokeOpacity={1} />
+          </div>
         ) : (
           <div
             className={Style.mapDescriptionContainer}
@@ -126,7 +147,7 @@ export default function BasicTabs(props) {
             Seleziona un metabolita valido per visualizzare il grafico
           </div>
         )}
-      </TabPanel> */}
+      </TabPanel>
       <TabPanel className={Style.treeDescContainer} value={value} index={3}>
         {props.treeSelected ? (
           <React.Fragment>
