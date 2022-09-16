@@ -88,26 +88,17 @@ export default function BasicTabs(props) {
           )}
         </div>
       </TabPanel>
-      {/* <TabPanel value={value} index={1}> */}
-        {/* {props.chartDataMetabolitics !== null ? (
+      <TabPanel value={value} index={1}>
+        {props.chartDataMetabolitics !== null ? (
           <ReactApexChart
-            height="800px"
+            height="400px"
             options={props.chartDataMetabolitics.options}
             series={props.chartDataMetabolitics.series}
             type="bar"
-            horizontal="true"
-            stacked="true"
           />
         ) : props.isLoadingCultivar ? (
-          <div
-            className={Style.loadingContainer}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-            }}
-          >
+          <div className={Style.loadingContainer}
+          style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center", alignContent: "center"}}>
             <TailSpin stroke="#000" strokeOpacity={1} />
           </div>
         ) : (
@@ -117,15 +108,24 @@ export default function BasicTabs(props) {
           >
             Seleziona un metabolita valido per visualizzare il grafico
           </div>
-        )} */}
-      {/* </TabPanel> */}
+        )}
+      </TabPanel>
       {/* <TabPanel value={value} index={2}>
+        {props.chartDataMetabolitics !== null ? (
         <ReactApexChart
           height="800px"
           options={props.chartDataMetabolitics.options}
           series={props.chartDataMetabolitics.series}
           type="bar"
         />
+        ) : (
+          <div
+            className={Style.mapDescriptionContainer}
+            style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
+          >
+            Seleziona un metabolita valido per visualizzare il grafico
+          </div>
+        )}
       </TabPanel> */}
       <TabPanel className={Style.treeDescContainer} value={value} index={3}>
         {props.treeSelected ? (

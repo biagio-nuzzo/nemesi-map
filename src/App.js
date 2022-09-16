@@ -62,15 +62,13 @@ const Core = () => {
     const [treeSelected, setTreeSelected] = useState(0);
     const [elNumber, setElNumber] = useState(0);
     const [chartDataMetabolitics, setChartDataMetabolitics] = useState(null);
-    const [tableDataMetabolitics, setTableDataMetabolitics] = useState(0);
     const [mapType, setMapType] = useState("presence");
     const [isLoadingCultivar, setIsLoadingCultivar] = useState(false);
 
     return (
         <React.Fragment>
             <NavBar mapType={mapType} setMapType={setMapType} setIsLoadingCultivar={setIsLoadingCultivar}
-            setElNumber={setElNumber} setChartDataMetabolitics={setChartDataMetabolitics}
-            setTableDataMetabolitics={setChartDataMetabolitics}/>
+            setElNumber={setElNumber} setChartDataMetabolitics={setChartDataMetabolitics}/>
             <Row>
                 <Col md={8} style={{ padding: "0px" }}>
                     <NemesiMap mapType={mapType} treeSelected={treeSelected} setTreeSelected={setTreeSelected} />
@@ -79,7 +77,7 @@ const Core = () => {
                     <TabSetSide isLoadingCultivar={isLoadingCultivar} mapType={mapType} elNumber={elNumber} chartDataMetabolitics={chartDataMetabolitics} treeSelected={treeSelected} />
                 </Col>
                 <Col md={8}>
-                    <TreeTable tableDataMetabolitics={tableDataMetabolitics}/>
+                    <TreeTable />
                 </Col>
             </Row>
         </React.Fragment>

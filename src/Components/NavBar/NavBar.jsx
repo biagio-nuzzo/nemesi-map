@@ -39,13 +39,17 @@ function chartFakeDataGenerator() {
 const NavBar = (props) => {
   const getChartData = async (value) => {
     if (value.length > 0) {
-      props.setIsLoadingCultivar(true);
       await axios
         .get(
           "http://nemesi-project.it/api/v1/cultivar-chart/?metabolites=" + value
         )
         .then((response) => {
-          console.log(response.data);
+          if (value.length === 1 && response.data.series.length === 0) {
+            props.setChartDataMetabolitics(null);
+            props.setIsLoadingCultivar(false);
+            return;
+          }
+
           const state = {
             options: {
               chart: {
@@ -65,8 +69,8 @@ const NavBar = (props) => {
             },
             series: response.data.series,
           };
-          console.log(state);
           props.setChartDataMetabolitics(state);
+          props.setIsLoadingCultivar(false);
         })
         .catch((error) => {
           console.log(error.response);
@@ -74,10 +78,10 @@ const NavBar = (props) => {
         .finally(() => {
           props.setIsLoadingCultivar(false);
         });
-        ;
     } else {
-      if ( props.chartDataMetabolitics !== null) {
+      if (props.chartDataMetabolitics !== null) {
         props.setChartDataMetabolitics(null);
+        props.setIsLoadingCultivar(false);
       }
     }
   };
@@ -209,7 +213,7 @@ const NavBar = (props) => {
                   label="asdasd"
                   onChange={(e) => {
                     props.setMapType(e.target.value);
-                    props.setChartDataMetabolitics([]);
+                    props.setChartDataMetabolitics(null);
                   }}
                 >
                   <MenuItem value={mapTypeDict.presence.value}>
@@ -239,16 +243,13 @@ const NavBar = (props) => {
                     value={tagColorList}
                     getOptionDisabled={(option) => tagColorList.length >= 12}
                     onChange={(event, newValue) => {
-                      var metaList = [];
-                      // getTableData();
-                      for (let i = 0; i < newValue.length; i++) {
-                        metaList.push(newValue[i].id);
-                        props.setChartDataMetabolitics(
-                          getChartData(metaList.toString())
-                        );
-                      }
-
+                      props.setIsLoadingCultivar(true);
                       setTagColorList(newValue);
+                      const tmpList = [];
+                      for (let i = 0; i < newValue.length; i++) {
+                        tmpList.push(newValue[i].id).toString();
+                      }
+                      getChartData(tmpList);
                     }}
                     getOptionLabel={(option) => {
                       return "Metabolita " + option.cod_met;
@@ -270,20 +271,16 @@ const NavBar = (props) => {
                           variant="outlined"
                           size="small"
                           onDelete={() => {
-                            var metaList = [];
-                            for (let i = 0; i < tagColorList.length; i++) {
-                              if (tagColorList[i].id !== option.id) {
-                                metaList.push(tagColorList[i].id);
-                              }
+                            props.setIsLoadingCultivar(true);
+                            const tmpList = tagColorList.filter(
+                              (item) => item.cod_met !== option.cod_met
+                            );
+                            setTagColorList(tmpList);
+                            const tmpList2 = [];
+                            for (let i = 0; i < tmpList.length; i++) {
+                              tmpList2.push(tmpList[i].id).toString();
                             }
-                            props.setChartDataMetabolitics(
-                              getChartData(metaList.toString())
-                            );
-                            setTagColorList(
-                              tagColorList.filter(
-                                (item) => item.id !== option.id
-                              )
-                            );
+                            getChartData(tmpList2);
                           }}
                         />
                       ));
