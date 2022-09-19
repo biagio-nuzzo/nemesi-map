@@ -14,7 +14,7 @@ import Chip from "@mui/material/Chip";
 import axios from "axios";
 
 const NavBar = (props) => {
-  const getChartData = async (value) => {
+  const getChartData = async (value, valuecolors) => {
     if (value.length > 0) {
       await axios
         .get(
@@ -28,6 +28,7 @@ const NavBar = (props) => {
           }
           const state = {
             options: {
+              colors: valuecolors,
               chart: {
                 id: "basic-bar",
                 type: "bar",
@@ -44,6 +45,7 @@ const NavBar = (props) => {
               },
             },
             series: response.data.series,
+
           };
           props.setChartDataMetabolitics(state);
           props.setIsLoadingCultivar(false);
@@ -62,7 +64,7 @@ const NavBar = (props) => {
     }
   };
 
-  const getTreeData = async (value) => {
+  const getTreeData = async (value, valuecolors) => {
     if (value.length > 0) {
       await axios
         .get("http://nemesi-project.it/api/v1/tree-chart/?metabolites=" + value)
@@ -74,6 +76,7 @@ const NavBar = (props) => {
           }
           const state = {
             options: {
+              colors: valuecolors,
               chart: {
                 id: "basic-bar",
                 type: "bar",
@@ -119,63 +122,82 @@ const NavBar = (props) => {
     },
   };
 
-  // const tmpDict = [
-  //   {
-  //     key: 1,
-  //     title: "Metaboliti 1",
-  //     label: "metaboliti 1",
-  //     color: "#a6cee3",
-  //   },
-  //   {
-  //     key: 2,
-  //     title: "Metaboliti 2",
-  //     label: "metaboliti 2",
-  //     color: "#1f78b4",
-  //   },
-  //   {
-  //     key: 3,
-  //     title: "Metaboliti 3",
-  //     label: "metaboliti 3",
-  //     color: "#b2df8a",
-  //   },
-  //   {
-  //     key: 4,
-  //     title: "Metaboliti 4",
-  //     label: "metaboliti 4",
-  //     color: "#33a02c",
-  //   },
-  //   {
-  //     key: 5,
-  //     title: "Metaboliti 5",
-  //     label: "metaboliti 5",
-  //     color: "#ff7f00",
-  //   },
-  //   {
-  //     key: 6,
-  //     title: "Metaboliti 6",
-  //     label: "metaboliti 6",
-  //     color: "#cab2d6",
-  //   },
-  //   {
-  //     key: 7,
-  //     title: "Metaboliti 7",
-  //     label: "metaboliti 7",
-  //     color: "#6a3d9a",
-  //   },
-  //   {
-  //     key: 8,
-  //     title: "Metaboliti 8",
-  //     label: "metaboliti 8",
-  //     color: "#ffff99",
-  //   },
-  //   {
-  //     key: 9,
-  //     title: "Metaboliti 9",
-  //     label: "metaboliti 9",
-  //     color: "#b15928",
-  //   },
-  // ];
+  const colorPool = [
+    {
+      key: 0,
+      color: "#a6cee3",
+      state: "free",
+    },
+    {
+      key: 1,
+      color: "#1f78b4",
+      state: "free",
+    },
+    {
+      key: 2,
+      color: "#b2df8a",
+      state: "free",
+    },
+    {
+      key: 3,
+      color: "#33a02c",
+      state: "free",
+    },
+    {
+      key: 4,
+      color: "#ff7f00",
+      state: "free",
+    },
+    {
+      key: 5,
+      color: "#cab2d6",
+      state: "free",
+    },
+    {
+      key: 6,
+      color: "#6a3d9a",
+      state: "free",
+    },
+    {
+      key: 7,
+      color: "#ffff99",
+      state: "free",
+    },
+    {
+      key: 8,
+      color: "#b15928",
+      state: "free",
+    },
+    {
+      key: 9,
+      color: "#fb9a99",
+      state: "free",
+    },
+    {
+      key: 10,
+      color: "#e31a1c",
+      state: "free",
+    },
+    {
+      key: 11,
+      color: "#fdbf6f",
+      state: "free",
+    }
+  ];
+  const metacolorlist = [];
+  function colorhandler(metabolit) {
 
+    for (let i = 0; i < metabolit.length; i++) {
+      metabolit[i].color = null;
+      for (let j = 0; j < colorPool.length; j++) {
+        if (colorPool[j].state === "free" && metabolit[i].color === null) {
+          colorPool[j].state = "used";
+          metabolit[i].color = colorPool[j].color;
+          metacolorlist.push(metabolit[i]);
+        }
+      }
+    }
+  }
   const [metabolitList, setMetabolitList] = useState([]);
 
   useEffect(() => {
@@ -251,14 +273,17 @@ const NavBar = (props) => {
                     value={tagColorList}
                     getOptionDisabled={(option) => tagColorList.length >= 12}
                     onChange={(event, newValue) => {
+                      colorhandler(newValue);
                       props.setIsLoadingCultivar(true);
                       setTagColorList(newValue);
-                      const tmpList = [];
+                      const metaList = [];
+                      const metacolorList = [];
                       for (let i = 0; i < newValue.length; i++) {
-                        tmpList.push(newValue[i].id).toString();
+                        metaList.push(newValue[i].id).toString();
+                        metacolorList.push(newValue[i].color).toString();
                       }
-                      getChartData(tmpList);
-                      getTreeData(tmpList);
+                      getChartData(metaList, metacolorList);
+                      getTreeData(metaList, metacolorList);
                     }}
                     getOptionLabel={(option) => {
                       return "Metabolita " + option.cod_met;
@@ -281,16 +306,18 @@ const NavBar = (props) => {
                           size="small"
                           onDelete={() => {
                             props.setIsLoadingCultivar(true);
-                            const tmpList = tagColorList.filter(
+                            const metaList = tagColorList.filter(
                               (item) => item.cod_met !== option.cod_met
                             );
-                            setTagColorList(tmpList);
-                            const tmpList2 = [];
-                            for (let i = 0; i < tmpList.length; i++) {
-                              tmpList2.push(tmpList[i].id).toString();
+                            setTagColorList(metaList);
+                            const metaList2 = [];
+                            const metacolorList = [];
+                            for (let i = 0; i < metaList.length; i++) {
+                              metaList2.push(metaList[i].id).toString();
+                              metacolorList.push(metaList[i].color).toString();
                             }
-                            getChartData(tmpList2);
-                            getTreeData(tmpList2);
+                            getChartData(metaList2, metacolorList);
+                            getTreeData(metaList2, metacolorList);
                           }}
                         />
                       ));

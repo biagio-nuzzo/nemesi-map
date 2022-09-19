@@ -7,7 +7,6 @@ import Style from "./TabSet.module.css";
 import ReactApexChart from "react-apexcharts";
 import Chip from "@mui/material/Chip";
 
-
 import { TailSpin } from "react-loading-icons";
 
 function TabPanel(props) {
@@ -186,18 +185,28 @@ export default function BasicTabs(props) {
                             value={metabolit}
                             style={{
                               marginLeft: "6px",
-                              backgroundColor: metabolit.color,
+                              backgroundColor: "#f5f5f5",
                             }}
                             variant="outlined"
                             size="small"
                             label={metabolit.metabolit__cod_met}
                           />
-                          </React.Fragment>
+                        </React.Fragment>
                       );
                     })
                   : "Nessun metabolita rilevato"}
-                  <br />
-                  Ultima rilevazione: {props.treeSelected.metabolites.sample_date}
+
+                <br />
+                <p style={{ fontSize: "18px", fontWeight: 300 }}>
+                  Ultima rilevazione:{" "}
+                  {props.treeSelected.metabolites.length > 0 ? (
+                    <React.Fragment>
+                      {props.treeSelected.metabolites[0].sample_date}
+                    </React.Fragment>
+                  ) : (
+                    "Nessuna rilevazione"
+                  )}
+                </p>
               </p>
             </div>
             <hr />
