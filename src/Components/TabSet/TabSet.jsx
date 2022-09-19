@@ -5,6 +5,8 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Style from "./TabSet.module.css";
 import ReactApexChart from "react-apexcharts";
+import Chip from "@mui/material/Chip";
+
 
 import { TailSpin } from "react-loading-icons";
 
@@ -173,7 +175,30 @@ export default function BasicTabs(props) {
               <p style={{ fontSize: "22px", fontWeight: 500 }}>
                 Presenza Metaboliti
               </p>
-              <span className={Style.metabolTag}>---</span>
+              <p style={{ fontSize: "18px", fontWeight: 300 }}>
+                {props.treeSelected.metabolites.length > 0
+                  ? props.treeSelected.metabolites.map((metabolit) => {
+                      return (
+                        <React.Fragment>
+                          <Chip
+                            key={metabolit.metabolit__id}
+                            className={Style.tagStyle}
+                            value={metabolit}
+                            style={{
+                              marginLeft: "6px",
+                              backgroundColor: metabolit.color,
+                            }}
+                            variant="outlined"
+                            size="small"
+                            label={metabolit.metabolit__cod_met}
+                          />
+                          </React.Fragment>
+                      );
+                    })
+                  : "Nessun metabolita rilevato"}
+                  <br />
+                  Ultima rilevazione: {props.treeSelected.metabolites.sample_date}
+              </p>
             </div>
             <hr />
             <div className={Style.treeDescContent}>

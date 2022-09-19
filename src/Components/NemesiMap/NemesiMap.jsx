@@ -60,7 +60,6 @@ const NemesiMap = (props) => {
         className={Style.mapBoxContainer + " mx-0"}
         style={{ position: "relative" }}
       >
-
         {municipalData && markerData && regionData && provinceData ? (
           <MapContainer
             onzoomend={(e) => {
@@ -143,6 +142,27 @@ const NemesiMap = (props) => {
                   {props.treeSelected.health_status
                     ? props.treeSelected.health_status
                     : "-"}
+                </span>
+              </p>
+              <br />
+              <p>
+                Metaboliti: <br />
+                <span style={{ fontWeight: 300 }}>
+                  {props.treeSelected.metabolites.length > 0
+                    ? props.treeSelected.metabolites.map((metabolit) => {
+                        if (props.treeSelected.metabolites.length > 1) {
+                          if (
+                            props.treeSelected.metabolites.indexOf(metabolit) <
+                            props.treeSelected.metabolites.length - 1
+                          ) {
+                            return metabolit.metabolit__cod_met + ", ";
+                          }
+                          return metabolit.metabolit__cod_met;
+                        } else {
+                          return metabolit.metabolit__cod_met;
+                        }
+                      })
+                    : "Nessun metabolita rilevato"}
                 </span>
               </p>
             </div>

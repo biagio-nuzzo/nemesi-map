@@ -13,29 +13,6 @@ import Chip from "@mui/material/Chip";
 
 import axios from "axios";
 
-// function chartFakeDataGenerator() {
-//   const state = {
-//     options: {
-//       chart: {
-//         id: "basic-bar",
-//         type: "bar",
-//         height: 400,
-//         stacked: true,
-//       },
-//       plotOptions: {
-//         bar: {
-//           horizontal: true,
-//         },
-//       },
-//       xaxis: {
-//         categories: [],
-//       },
-//     },
-//     series: [],
-//   };
-//   return state;
-// }
-
 const NavBar = (props) => {
   const getChartData = async (value) => {
     if (value.length > 0) {
