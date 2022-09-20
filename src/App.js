@@ -13,6 +13,7 @@ const Core = () => {
   const [chartDataTree, setChartDataTree] = useState(null);
   const [mapType, setMapType] = useState("presence");
   const [isLoadingCultivar, setIsLoadingCultivar] = useState(false);
+  const [metacolor, setMetacolor] = useState([]);
 
   return (
     <React.Fragment>
@@ -23,6 +24,8 @@ const Core = () => {
         setElNumber={setElNumber}
         setChartDataMetabolitics={setChartDataMetabolitics}
         setChartDataTree={setChartDataTree}
+        setMetacolor={setMetacolor}
+        metacolor={metacolor}
       />
       <Row>
         <Col md={8} style={{ padding: "0px" }}>
@@ -44,6 +47,7 @@ const Core = () => {
             chartDataMetabolitics={chartDataMetabolitics}
             chartDataTree={chartDataTree}
             treeSelected={treeSelected}
+            metacolor={metacolor}
           />
         </Col>
         <Col md={8}>

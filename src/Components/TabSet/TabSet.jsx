@@ -175,17 +175,26 @@ export default function BasicTabs(props) {
                 Presenza Metaboliti
               </p>
               <p style={{ fontSize: "18px", fontWeight: 300 }}>
+
                 {props.treeSelected.metabolites.length > 0
                   ? props.treeSelected.metabolites.map((metabolit) => {
+                    let tmpcolor = "f5f5f5";
+                    if (props.metacolor.length > 0) {
+                      for (let i = 0; i < props.metacolor.length; i++){
+                        if (metabolit.metabolit__cod_met === props.metacolor[i].cod_met){
+                          tmpcolor = props.metacolor[i].color;
+                        }
+                      }
+                    }
                       return (
                         <React.Fragment>
                           <Chip
-                            key={metabolit.metabolit__id}
+                            key={metabolit.metabolit__cod_met}
                             className={Style.tagStyle}
                             value={metabolit}
                             style={{
                               marginLeft: "6px",
-                              backgroundColor: "#f5f5f5",
+                              backgroundColor: tmpcolor,
                             }}
                             variant="outlined"
                             size="small"

@@ -184,20 +184,25 @@ const NavBar = (props) => {
       state: "free",
     }
   ];
-  const metacolorlist = [];
-  function colorhandler(metabolit) {
 
+  function colorhandler(metabolit) {
+    const tmpcolor = [];
+    if (metabolit.length < 1) {
+      props.setMetacolor([]);
+    }
     for (let i = 0; i < metabolit.length; i++) {
       metabolit[i].color = null;
       for (let j = 0; j < colorPool.length; j++) {
         if (colorPool[j].state === "free" && metabolit[i].color === null) {
           colorPool[j].state = "used";
           metabolit[i].color = colorPool[j].color;
-          metacolorlist.push(metabolit[i]);
+          tmpcolor.push(metabolit[i]);
         }
       }
     }
+    props.setMetacolor(tmpcolor);
   }
+
   const [metabolitList, setMetabolitList] = useState([]);
 
   useEffect(() => {
@@ -318,6 +323,7 @@ const NavBar = (props) => {
                             }
                             getChartData(metaList2, metacolorList);
                             getTreeData(metaList2, metacolorList);
+                            props.setMetacolor(metaList);
                           }}
                         />
                       ));
