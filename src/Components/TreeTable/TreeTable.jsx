@@ -1,39 +1,44 @@
 import React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { useDemoData } from "@mui/x-data-grid-generator";
 
-const TreeTable = () => {
-  const VISIBLE_FIELDS = [
-    "name",
-    "rating",
-    "country",
-    "dateCreated",
-    "isAdmin",
-  ];
-  const { data } = useDemoData({
-    dataSet: "Employee",
-    visibleFields: VISIBLE_FIELDS,
-    rowLength: 100,
-  });
-
+const TreeTable = (props) => {
   const columns = [
-    { field: "Metabolita" },
-    { field: "Data prelievo" },
-    { field: "Concentrazione" },
-    { field: "Livello di significatività" },
-    { field: "Faold change" },
-    { field: "REgolazione" },
-    { field: "Codice laboratorio" },
-    { field: "Laboratorio" },
-    { field: "Indirizzo" },
-    { field: "Telefono" },
-    { field: "Albero" },
-    { field: "Età" },
-    { field: "Diametro tronco" },
-    { field: "Stato di cura" },
-    { field: "Fase fenologica" },
-    { field: "Cultivar" },
+    { field: "cod_met", headerName: "Metabolita" },
+    { field: "sample_date", headerName: "Data prelievo", width: 100 },
+    { field: "mz", headerName: "Concentrazione", width: 120 },
+    { field: "tree", headerName: "Albero" },
+    { field: "age", headerName: "Età" },
+    { field: "diameter", headerName: "Diametro tronco", width: 120 },
+    { field: "status", headerName: "Stato di cura", width: 120 },
+    { field: "phase", headerName: "Fase fenologica", width: 120 },
+    { field: "cultivar", headerName: "Cultivar" },
+    { field: "field", headerName: "Agro" },
+    { field: "laboratory", headerName: "Codice Laboratorio", width: 200 },
   ];
+
+  let rows = [];
+  const meta = "";
+
+  if (props.tableData !== null) {
+    props.tableData.forEach((element) => {
+      rows.push({
+        id: element.cod_met,
+        cod_met: element.cod_met,
+        sample_date: element.sample_date,
+        mz: element.mz,
+        tree: element.tree,
+        age: element.age,
+        diameter: element.diameter,
+        status: element.status,
+        phase: element.phase,
+        cultivar: element.cultivar,
+        field: element.field,
+        laboratory: element.laboratory,
+      });
+    });
+  } else {
+    rows = [];
+  }
 
   return (
     <div
@@ -46,14 +51,7 @@ const TreeTable = () => {
     >
       <DataGrid
         columns={columns}
-        rows={[
-          {
-            id: 1,
-            username: "@MUI",
-            age: 20,
-            Metabolita: "Metabolita 1",
-          },
-        ]}
+        rows={rows}
         components={{ Toolbar: GridToolbar }}
       />
     </div>

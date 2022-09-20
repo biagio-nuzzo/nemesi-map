@@ -45,7 +45,6 @@ const NavBar = (props) => {
               },
             },
             series: response.data.series,
-
           };
           props.setChartDataMetabolitics(state);
           props.setIsLoadingCultivar(false);
@@ -111,6 +110,26 @@ const NavBar = (props) => {
     }
   };
 
+  const getTableData = async (value) => {
+    if (value.length > 0) {
+      await axios
+        .get("http://nemesi-project.it/api/v1/table-data/?metabolites=" + value)
+        .then((response) => {
+          if (value.length === 1 && response.data.length === 0) {
+            props.setTableData(null);
+          }
+          props.setTableData(response.data);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    } else {
+      if (props.tableData !== null) {
+        props.setTableData(null);
+      }
+    }
+  };
+
   const mapTypeDict = {
     presence: {
       label: "Presenza di metaboliti",
@@ -124,65 +143,53 @@ const NavBar = (props) => {
 
   const colorPool = [
     {
-      key: 0,
       color: "#a6cee3",
       state: "free",
     },
     {
-      key: 1,
       color: "#1f78b4",
       state: "free",
     },
     {
-      key: 2,
       color: "#b2df8a",
       state: "free",
     },
     {
-      key: 3,
       color: "#33a02c",
       state: "free",
     },
     {
-      key: 4,
       color: "#ff7f00",
       state: "free",
     },
     {
-      key: 5,
       color: "#cab2d6",
       state: "free",
     },
     {
-      key: 6,
       color: "#6a3d9a",
       state: "free",
     },
     {
-      key: 7,
       color: "#ffff99",
       state: "free",
     },
     {
-      key: 8,
       color: "#b15928",
       state: "free",
     },
     {
-      key: 9,
       color: "#fb9a99",
       state: "free",
     },
     {
-      key: 10,
       color: "#e31a1c",
       state: "free",
     },
     {
-      key: 11,
       color: "#fdbf6f",
       state: "free",
-    }
+    },
   ];
 
   function colorhandler(metabolit) {
@@ -249,6 +256,7 @@ const NavBar = (props) => {
                     props.setMapType(e.target.value);
                     props.setChartDataMetabolitics(null);
                     props.setChartDataTree(null);
+                    props.setTableData(null);
                   }}
                 >
                   <MenuItem value={mapTypeDict.presence.value}>
@@ -289,6 +297,7 @@ const NavBar = (props) => {
                       }
                       getChartData(metaList, metacolorList);
                       getTreeData(metaList, metacolorList);
+                      getTableData(metaList);
                     }}
                     getOptionLabel={(option) => {
                       return "Metabolita " + option.cod_met;
@@ -323,6 +332,7 @@ const NavBar = (props) => {
                             }
                             getChartData(metaList2, metacolorList);
                             getTreeData(metaList2, metacolorList);
+                            getTableData(metaList2);
                             props.setMetacolor(metaList);
                           }}
                         />

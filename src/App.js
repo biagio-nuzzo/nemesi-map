@@ -6,7 +6,6 @@ import NavBar from "./Components/NavBar/NavBar";
 import TreeTable from "./Components/TreeTable/TreeTable";
 
 const Core = () => {
-
   const [treeSelected, setTreeSelected] = useState(0);
   const [elNumber, setElNumber] = useState(0);
   const [chartDataMetabolitics, setChartDataMetabolitics] = useState(null);
@@ -14,6 +13,7 @@ const Core = () => {
   const [mapType, setMapType] = useState("presence");
   const [isLoadingCultivar, setIsLoadingCultivar] = useState(false);
   const [metacolor, setMetacolor] = useState([]);
+  const [tableData, setTableData] = useState(null);
 
   return (
     <React.Fragment>
@@ -25,7 +25,7 @@ const Core = () => {
         setChartDataMetabolitics={setChartDataMetabolitics}
         setChartDataTree={setChartDataTree}
         setMetacolor={setMetacolor}
-        metacolor={metacolor}
+        setTableData={setTableData}
       />
       <Row>
         <Col md={8} style={{ padding: "0px" }}>
@@ -51,7 +51,7 @@ const Core = () => {
           />
         </Col>
         <Col md={8}>
-          <TreeTable />
+          <TreeTable metacolor={metacolor} tableData={tableData} />
         </Col>
       </Row>
     </React.Fragment>
