@@ -38,3 +38,20 @@
 .mapBoxPopup p {
   margin-bottom: 8px;
 }
+
+.mapBoxLegend {
+  position: absolute;
+  bottom: 10%;
+  left: 35px;
+  z-index: 450;
+  width: 210px;
+  padding: 10px 10px;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  background-color: white;
+}
+
+.mapBoxLegend p {
+  margin-bottom: 8px;
+}

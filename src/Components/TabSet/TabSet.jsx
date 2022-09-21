@@ -83,8 +83,16 @@ export default function BasicTabs(props) {
                 La mappa della concentrazione
               </span>
               <br />
-              <p style={{ color: "grey" }}>lorem</p>
-              <p style={{ color: "grey", marginTop: "25px" }}>lorem</p>
+              <p style={{ color: "grey" }}>
+                su territorio regionale dei metaboliti rilevati sugli alberi
+                analizzati tramite processi metabolomici targeted/untargeted.
+                Cliccare sui markers per aprire il riquadro con informazioni
+                dettagliate.
+              </p>
+              <p style={{ color: "grey", marginTop: "25px" }}>
+                I dati riportati nella seguente mappa fanno riferimento
+                all'ultimo periodo disponibile rilevato.
+              </p>
             </React.Fragment>
           )}
         </div>

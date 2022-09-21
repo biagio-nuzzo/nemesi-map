@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
+import Chip from "@mui/material/Chip";
 
 import axios from "axios";
 import Style from "./NemesiMap.module.css";
@@ -166,6 +167,52 @@ const NemesiMap = (props) => {
                 </span>
               </p>
             </div>
+          </div>
+        )}
+
+        {props.mapType === "concentration" && (
+          <div className={Style.mapBoxLegend}>
+            <div>
+              <p><strong>Concetrazione metabolita</strong></p>
+              <div className={Style.legendContainer}>
+                <div className={Style.legendItem}>
+                  <div className={Style.legendItemColor}></div>
+                  <p>
+                    <Chip
+                      sx={{
+                        bgcolor: "#D6181B",
+                        width: "20px",
+                        height: "20px",
+                        marginRight: "10px",
+                      }}
+                      />
+                    130 ≤ Con ≤ 200 </p>
+                  <div className={Style.legendItemColor}></div>
+                  <p>
+                  <Chip
+                      sx={{
+                        bgcolor: "#FDAE61",
+                        width: "20px",
+                        height: "20px",
+                        marginRight: "10px",
+                      }}
+                      />
+                    70 ≤ Con ≤ 130 </p>
+                  <div className={Style.legendItemColor}></div>
+                  <p>
+                  <Chip
+                      sx={{
+                        bgcolor: "#A6D96A",
+                        width: "20px",
+                        height: "20px",
+                        marginRight: "10px",
+                      }}
+                      />
+                    0 ≤ Con ≤ 70 </p>
+                </div>
+                <p><i>Valori di concentrazione del metabolita</i></p>
+              </div>
+            </div>      
           </div>
         )}
       </div>
