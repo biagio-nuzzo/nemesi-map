@@ -1,9 +1,33 @@
 import React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import Chip from "@mui/material/Chip";
+import Style from "./TreeTable.module.css";
 
 const TreeTable = (props) => {
+
+  function colorhandler(color) {
+    for (let i = 0; i < props.metacolor.length; i++) {
+      if (color.id === props.metacolor[i].cod_met) {
+        return props.metacolor[i].color;
+      }
+    }
+  }
+
   const columns = [
-    { field: "cod_met", headerName: "Metabolita" },
+    { field: "cod_met", headerName: "Metabolita",
+      renderCell: (params) => (
+        <Chip
+          key={params.value}
+          label={params.value}
+          size="small"
+          variant="outlined"
+          className={Style.tagStyle}
+          style={{
+            backgroundColor: colorhandler(params),
+            marginLeft: "6px",
+          }}
+        />
+      ),},
     { field: "sample_date", headerName: "Data prelievo", width: 100 },
     { field: "mz", headerName: "Concentrazione", width: 120 },
     { field: "tree", headerName: "Albero" },
@@ -17,7 +41,6 @@ const TreeTable = (props) => {
   ];
 
   let rows = [];
-  const meta = "";
 
   if (props.tableData !== null) {
     props.tableData.forEach((element) => {
@@ -39,7 +62,7 @@ const TreeTable = (props) => {
   } else {
     rows = [];
   }
-
+  
   return (
     <div
       style={{
