@@ -173,7 +173,9 @@ const NemesiMap = (props) => {
         {props.mapType === "concentration" && (
           <div className={Style.mapBoxLegend}>
             <div>
-              <p><strong>Concetrazione metabolita</strong></p>
+              <p>
+                <strong>Concetrazione metabolita</strong>
+              </p>
               <div className={Style.legendContainer}>
                 <div className={Style.legendItem}>
                   <div className={Style.legendItemColor}></div>
@@ -185,34 +187,39 @@ const NemesiMap = (props) => {
                         height: "20px",
                         marginRight: "10px",
                       }}
-                      />
-                    130 ≤ Con ≤ 200 </p>
+                    />
+                    130 ≤ Con ≤ 200{" "}
+                  </p>
                   <div className={Style.legendItemColor}></div>
                   <p>
-                  <Chip
+                    <Chip
                       sx={{
                         bgcolor: "#FDAE61",
                         width: "20px",
                         height: "20px",
                         marginRight: "10px",
                       }}
-                      />
-                    70 ≤ Con ≤ 130 </p>
+                    />
+                    70 ≤ Con ≤ 130{" "}
+                  </p>
                   <div className={Style.legendItemColor}></div>
                   <p>
-                  <Chip
+                    <Chip
                       sx={{
                         bgcolor: "#A6D96A",
                         width: "20px",
                         height: "20px",
                         marginRight: "10px",
                       }}
-                      />
-                    0 ≤ Con ≤ 70 </p>
+                    />
+                    0 ≤ Con ≤ 70{" "}
+                  </p>
                 </div>
-                <p><i>Valori di concentrazione del metabolita</i></p>
+                <p>
+                  <i>Valori di concentrazione del metabolita</i>
+                </p>
               </div>
-            </div>      
+            </div>
           </div>
         )}
       </div>

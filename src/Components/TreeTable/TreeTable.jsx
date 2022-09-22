@@ -4,7 +4,6 @@ import Chip from "@mui/material/Chip";
 import Style from "./TreeTable.module.css";
 
 const TreeTable = (props) => {
-
   function colorhandler(color) {
     for (let i = 0; i < props.metacolor.length; i++) {
       if (color.id === props.metacolor[i].cod_met) {
@@ -14,7 +13,9 @@ const TreeTable = (props) => {
   }
 
   const columns = [
-    { field: "cod_met", headerName: "Metabolita",
+    {
+      field: "cod_met",
+      headerName: "Metabolita",
       renderCell: (params) => (
         <Chip
           key={params.value}
@@ -27,7 +28,8 @@ const TreeTable = (props) => {
             marginLeft: "6px",
           }}
         />
-      ),},
+      ),
+    },
     { field: "sample_date", headerName: "Data prelievo", width: 100 },
     { field: "mz", headerName: "Concentrazione", width: 120 },
     { field: "tree", headerName: "Albero" },
@@ -62,7 +64,7 @@ const TreeTable = (props) => {
   } else {
     rows = [];
   }
-  
+
   return (
     <div
       style={{

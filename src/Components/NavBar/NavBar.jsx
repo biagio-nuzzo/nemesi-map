@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Style from "./NavBar.module.css";
 import Chip from "@mui/material/Chip";
+import { TailSpin } from "react-loading-icons";
 
 import axios from "axios";
 
@@ -192,33 +193,62 @@ const NavBar = (props) => {
     },
   ];
 
+  const concentrationColorPool = [
+    "#D6181B", //red
+    "#FDAE61", //yellow
+    "#A6D96A", //green
+  ];
+
   function colorhandler(metabolit) {
-    const tmpcolor = [];
-    if (metabolit.length < 1) {
-      props.setMetacolor([]);
-    }
-    for (let i = 0; i < metabolit.length; i++) {
-      metabolit[i].color = null;
-      for (let j = 0; j < colorPool.length; j++) {
-        if (colorPool[j].state === "free" && metabolit[i].color === null) {
-          colorPool[j].state = "used";
-          metabolit[i].color = colorPool[j].color;
-          tmpcolor.push(metabolit[i]);
+    if (props.mapType === "presence") {
+      const tmpcolor = [];
+      if (metabolit.length < 1) {
+        props.setMetacolor([]);
+      }
+      for (let i = 0; i < metabolit.length; i++) {
+        metabolit[i].color = null;
+        for (let j = 0; j < colorPool.length; j++) {
+          if (colorPool[j].state === "free" && metabolit[i].color === null) {
+            colorPool[j].state = "used";
+            metabolit[i].color = colorPool[j].color;
+            tmpcolor.push(metabolit[i]);
+          }
         }
       }
+      props.setMetacolor(tmpcolor);
+    } else {
+      if (metabolit.length < 1) {
+        props.setMetacolor([]);
+      }
+      for (let i = 0; i < metabolit.length; i++) {
+        if (metabolit[i].mz === null || metabolit[i].mz < 70) {
+          metabolit[i].color = concentrationColorPool[2];
+        }
+        if (metabolit[i].mz > 70 && metabolit[i].mz < 130) {
+          metabolit[i].color = concentrationColorPool[1];
+        }
+        if (metabolit[i].mz > 130) {
+          metabolit[i].color = concentrationColorPool[0];
+        }
+      }
+      props.setMetacolor(metabolit);
     }
-    props.setMetacolor(tmpcolor);
   }
 
   const [metabolitList, setMetabolitList] = useState([]);
 
   useEffect(() => {
     const getMetabolits = async () => {
-      const response = await axios.get(
-        "http://nemesi-project.it/api/v1/metabolits/?format=json"
-      );
-      setMetabolitList(response.data);
+      await axios
+        .get("http://nemesi-project.it/api/v1/metabolits/?format=json")
+        .then((response) => {
+          setMetabolitList(response.data);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
     };
+
     getMetabolits();
   }, []);
 
@@ -254,6 +284,7 @@ const NavBar = (props) => {
                   label="asdasd"
                   onChange={(e) => {
                     props.setMapType(e.target.value);
+                    setTagColorList([]);
                     props.setChartDataMetabolitics(null);
                     props.setChartDataTree(null);
                     props.setTableData(null);
@@ -285,6 +316,19 @@ const NavBar = (props) => {
                     options={metabolitList}
                     value={tagColorList}
                     getOptionDisabled={(option) => tagColorList.length >= 12}
+                    loading={metabolitList < 1}
+                    loadingText=<div
+                      className={Style.loadingContainer}
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignContent: "center",
+                      }}
+                    >
+                      <TailSpin stroke="#000" strokeOpacity={1} />
+                    </div>
                     onChange={(event, newValue) => {
                       colorhandler(newValue);
                       props.setIsLoadingCultivar(true);
