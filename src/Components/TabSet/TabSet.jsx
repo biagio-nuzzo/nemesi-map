@@ -98,7 +98,14 @@ export default function BasicTabs(props) {
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {props.chartDataMetabolitics !== null ? (
+        {props.mapType === "concentration" ? (
+          <div
+            className={Style.mapDescriptionContainer}
+            style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
+          >
+            Selezionare la mappa della <strong>presenza di metaboliti</strong> per visualizzare il grafico
+          </div>
+        ) : props.chartDataMetabolitics !== null ? (
           <ReactApexChart
             height="750px"
             options={props.chartDataMetabolitics.options}

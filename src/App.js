@@ -4,6 +4,7 @@ import NemesiMap from "./Components/NemesiMap/NemesiMap";
 import TabSetSide from "./Components/TabSet/TabSet";
 import NavBar from "./Components/NavBar/NavBar";
 import TreeTable from "./Components/TreeTable/TreeTable";
+import TreeChart from "./Components/TreeChart/TreeChart";
 
 const Core = () => {
   const [treeSelected, setTreeSelected] = useState(0);
@@ -33,6 +34,8 @@ const Core = () => {
             mapType={mapType}
             treeSelected={treeSelected}
             setTreeSelected={setTreeSelected}
+            metacolor={metacolor}
+            chartDataTree={chartDataTree}
           />
         </Col>
         <Col
@@ -52,6 +55,7 @@ const Core = () => {
         </Col>
         <Col md={8}>
           <TreeTable metacolor={metacolor} tableData={tableData} />
+          <TreeChart tableData={tableData} />
         </Col>
       </Row>
     </React.Fragment>

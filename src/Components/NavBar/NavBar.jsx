@@ -224,10 +224,10 @@ const NavBar = (props) => {
         if (metabolit[i].mz === null || metabolit[i].mz < 70) {
           metabolit[i].color = concentrationColorPool[2];
         }
-        if (metabolit[i].mz > 70 && metabolit[i].mz < 130) {
+        if (metabolit[i].mz >= 70 && metabolit[i].mz < 130) {
           metabolit[i].color = concentrationColorPool[1];
         }
-        if (metabolit[i].mz > 130) {
+        if (metabolit[i].mz >= 130) {
           metabolit[i].color = concentrationColorPool[0];
         }
       }

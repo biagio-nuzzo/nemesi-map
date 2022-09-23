@@ -100,7 +100,12 @@ const NemesiMap = (props) => {
                 {...markerData}
               />
             ) : (
-              <CreateCirlceMarkers zoomLevel={zoomLevel} data={markerData} />
+              <CreateCirlceMarkers
+                zoomLevel={zoomLevel}
+                data={markerData}
+                setTreeSelected={props.setTreeSelected}
+                treeSelected={props.treeSelected}
+              />
             )}
           </MapContainer>
         ) : (

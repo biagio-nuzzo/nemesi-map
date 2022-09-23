@@ -6,6 +6,9 @@ const CreateCirlceMarkers = (props) => {
   const map = useMap();
   props.data.results.map((marker) => {
     var circleRadius = 0;
+    let circleColor = "#ff0000";
+
+    circleColor = marker.tree_color;
 
     if (props.zoomLevel <= 9) {
       circleRadius = 2500;
@@ -28,9 +31,12 @@ const CreateCirlceMarkers = (props) => {
         key={marker.id}
         center={[marker.lat, marker.lon]}
         radius={circleRadius}
+        color={circleColor}
+        fillOpacity={0.85}
         eventHandlers={{
           click: (e) => {
             map.setView([marker.lat, marker.lon], 20);
+            props.setTreeSelected(marker);
           },
           mouseover: (e) => {},
         }}
