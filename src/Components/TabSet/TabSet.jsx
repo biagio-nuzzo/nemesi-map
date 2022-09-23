@@ -252,6 +252,17 @@ export default function BasicTabs(props) {
                   })}
               </ul>
             </div>
+            <hr />
+            <div className={Style.treeDescContent}>
+              <p style={{ fontSize: "22px", fontWeight: 500 }}>
+                Xylella Fastidiosa
+              </p>
+              <p style={{ fontSize: "18px", fontWeight: 300 }}>
+                {
+                  
+                }
+              </p>
+            </div>
           </React.Fragment>
         ) : (
           <React.Fragment>

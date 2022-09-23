@@ -15,7 +15,8 @@ const Core = () => {
   const [isLoadingCultivar, setIsLoadingCultivar] = useState(false);
   const [metacolor, setMetacolor] = useState([]);
   const [tableData, setTableData] = useState(null);
-
+  const [analysisData, setAnalysisData] = useState([]);
+  
   return (
     <React.Fragment>
       <NavBar
@@ -36,6 +37,9 @@ const Core = () => {
             setTreeSelected={setTreeSelected}
             metacolor={metacolor}
             chartDataTree={chartDataTree}
+            analysisData={analysisData}
+            setAnalysisData={setAnalysisData}
+            analysisData={analysisData}
           />
         </Col>
         <Col
@@ -51,6 +55,7 @@ const Core = () => {
             chartDataTree={chartDataTree}
             treeSelected={treeSelected}
             metacolor={metacolor}
+            analysisData={analysisData}
           />
         </Col>
         <Col md={8}>

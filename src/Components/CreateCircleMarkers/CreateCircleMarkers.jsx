@@ -1,7 +1,9 @@
 import React from "react";
 import { useMap, Circle } from "react-leaflet";
 
+
 const CreateCirlceMarkers = (props) => {
+  
   const markersList = [];
   const map = useMap();
   props.data.results.map((marker) => {
@@ -9,20 +11,23 @@ const CreateCirlceMarkers = (props) => {
     let circleColor = "#ff0000";
 
     circleColor = marker.tree_color;
-
     if (props.zoomLevel <= 9) {
-      circleRadius = 2500;
-    } else if (props.zoomLevel > 9 && props.zoomLevel <= 12) {
-      circleRadius = 1300;
-    } else if (props.zoomLevel === 13) {
+      circleRadius = 4000;
+    } else if (props.zoomLevel > 9 && props.zoomLevel < 12) {
+      circleRadius = 2000;
+    } else if (props.zoomLevel === 12) {
       circleRadius = 1000;
+    } else if (props.zoomLevel === 13) {
+      circleRadius = 500;
     } else if (props.zoomLevel === 14) {
-      circleRadius = 600;
+      circleRadius = 300;
     } else if (props.zoomLevel === 15) {
-      circleRadius = 25;
+      circleRadius = 100;
     } else if (props.zoomLevel === 16) {
+      circleRadius = 20;
+    } else if (props.zoomLevel === 17) {
       circleRadius = 10;
-    } else if (props.zoomLevel >= 17) {
+    } else if (props.zoomLevel > 17) {
       circleRadius = 5;
     }
 

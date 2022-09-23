@@ -20,6 +20,7 @@ const NemesiMap = (props) => {
   const [markerData, setMarkerData] = useState("");
   const [mapBounds, setMapBounds] = useState();
   const [zoomLevel, setZoomLevel] = useState(8);
+  const [analysisData, setAnalysisData] = useState([]);
 
   useEffect(() => {
     const getMunicipalData = async () => {
@@ -49,12 +50,23 @@ const NemesiMap = (props) => {
       );
       setMarkerData(response.data);
     };
+    const getAnalysisData = async () => {
+      let responselist = [];
+      const response = await axios.get(
+        "http://nemesi-project.it/api/v1/analysis-xf/?format=json"
+      );
+      
+      setAnalysisData(response.data.results);
+      props.setAnalysisData(analysisData);
+      console.log(response.data.results);
+    };
+
     getMunicipalData();
     getProvinceData();
     getRegioneData();
     getMarkerData();
+    getAnalysisData();
   }, []);
-
   return (
     <React.Fragment>
       <div
