@@ -5,6 +5,7 @@ import TabSetSide from "./Components/TabSet/TabSet";
 import NavBar from "./Components/NavBar/NavBar";
 import TreeTable from "./Components/TreeTable/TreeTable";
 import TreeChart from "./Components/TreeChart/TreeChart";
+import axios from "axios";
 
 const Core = () => {
   const [treeSelected, setTreeSelected] = useState(0);
@@ -12,17 +13,35 @@ const Core = () => {
   const [chartDataMetabolitics, setChartDataMetabolitics] = useState(null);
   const [chartDataTree, setChartDataTree] = useState(null);
   const [mapType, setMapType] = useState("presence");
-  const [isLoadingCultivar, setIsLoadingCultivar] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [metacolor, setMetacolor] = useState([]);
   const [tableData, setTableData] = useState(null);
   const [analysisData, setAnalysisData] = useState([]);
-  
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => setOpen(false);
+
+  function handleXylellaClick(id) {
+    const getAnalysis = async (id) => {
+      setOpen(true);
+      setIsLoading(true);
+      const response = await axios.get(
+        "http://nemesi-project.it/api/v1/analysis-xf/?tree=" + id
+      );
+
+      console.log(response.data.results);
+      setAnalysisData(response.data.results);
+    };
+    getAnalysis(id);
+    setIsLoading(false);
+  }
+
   return (
     <React.Fragment>
       <NavBar
         mapType={mapType}
         setMapType={setMapType}
-        setIsLoadingCultivar={setIsLoadingCultivar}
+        setIsLoading={setIsLoading}
         setElNumber={setElNumber}
         setChartDataMetabolitics={setChartDataMetabolitics}
         setChartDataTree={setChartDataTree}
@@ -37,9 +56,6 @@ const Core = () => {
             setTreeSelected={setTreeSelected}
             metacolor={metacolor}
             chartDataTree={chartDataTree}
-            analysisData={analysisData}
-            setAnalysisData={setAnalysisData}
-            analysisData={analysisData}
           />
         </Col>
         <Col
@@ -48,7 +64,8 @@ const Core = () => {
           style={{ padding: "0px", borderTop: "2px solid black" }}
         >
           <TabSetSide
-            isLoadingCultivar={isLoadingCultivar}
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
             mapType={mapType}
             elNumber={elNumber}
             chartDataMetabolitics={chartDataMetabolitics}
@@ -56,6 +73,9 @@ const Core = () => {
             treeSelected={treeSelected}
             metacolor={metacolor}
             analysisData={analysisData}
+            handleXylellaClick={handleXylellaClick}
+            handleClose={handleClose}
+            open={open}
           />
         </Col>
         <Col md={8}>

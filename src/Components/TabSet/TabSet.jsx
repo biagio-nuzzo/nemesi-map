@@ -6,6 +6,11 @@ import Box from "@mui/material/Box";
 import Style from "./TabSet.module.css";
 import ReactApexChart from "react-apexcharts";
 import Chip from "@mui/material/Chip";
+import { WarningRounded, CheckRounded } from "@mui/icons-material";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
 import { TailSpin } from "react-loading-icons";
 
@@ -40,9 +45,50 @@ function a11yProps(index) {
 
 export default function BasicTabs(props) {
   const [value, setValue] = useState(0);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  function getXfPresence(params) {
+    if (params.value === true) {
+      return (
+        <React.Fragment>
+          <WarningRounded style={{ color: "red", marginRight: 10 }} />
+          Presente
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <React.Fragment>
+          <CheckRounded style={{ color: "green", marginRight: 10 }} />
+          Assente
+        </React.Fragment>
+      );
+    }
+  }
+
+  const columns = [
+    {
+      field: "xf_presence",
+      headerName: "Saggio lab. Xf",
+      width: 120,
+      renderCell: (params) => getXfPresence(params),
+    },
+    { field: "serial_id", headerName: "Seriale del sensore", width: 140 },
+    { field: "exp_id", headerName: "Numero busta", width: 120 },
+    { field: "id_raf", headerName: "ID IRAF", width: 100 },
+    { field: "observation_date", headerName: "Data rilievo", width: 100 },
+    { field: "sample_date", headerName: "Data prelievo", width: 100 },
+    { field: "method", headerName: "Metodo di analisi", width: 140 },
+    { field: "symptom", headerName: "Sintomo", width: 130 },
+    { field: "laboratory", headerName: "Laboratorio", width: 120 },
+    { field: "lab_technician", headerName: "Tecnico laboratorio", width: 140 },
+  ];
+
+  // let rows = [];
+  if (props.analysis !== null) {
+  }
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -103,7 +149,8 @@ export default function BasicTabs(props) {
             className={Style.mapDescriptionContainer}
             style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
           >
-            Selezionare la mappa della <strong>presenza di metaboliti</strong> per visualizzare il grafico
+            Selezionare la mappa della <strong>presenza di metaboliti</strong>{" "}
+            per visualizzare il grafico
           </div>
         ) : props.chartDataMetabolitics !== null ? (
           <ReactApexChart
@@ -112,7 +159,7 @@ export default function BasicTabs(props) {
             series={props.chartDataMetabolitics.series}
             type="bar"
           />
-        ) : props.isLoadingCultivar ? (
+        ) : props.isLoading ? (
           <div
             className={Style.loadingContainer}
             style={{
@@ -142,7 +189,7 @@ export default function BasicTabs(props) {
             series={props.chartDataTree.series}
             type="bar"
           />
-        ) : props.isLoadingCultivar ? (
+        ) : props.isLoading ? (
           <div
             className={Style.loadingContainer}
             style={{
@@ -257,9 +304,99 @@ export default function BasicTabs(props) {
               <p style={{ fontSize: "22px", fontWeight: 500 }}>
                 Xylella Fastidiosa
               </p>
-              <p style={{ fontSize: "18px", fontWeight: 300 }}>
-                {
-                  
+              <p
+                style={{
+                  fontSize: "18px",
+                  fontWeight: 300,
+                  display: "inline-grid",
+                  position: "absolute",
+                }}
+              >
+                {props.treeSelected.xylella &&
+                  props.treeSelected.xylella.map((xylella) => {
+                    if (xylella.tree === props.treeSelected.id) {
+                      if (xylella.xf_presence === true) {
+                        return (
+                          <React.Fragment>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              sx={{ mt: 1 }}
+                              onClick={() =>
+                                props.handleXylellaClick(xylella.tree)
+                              }
+                            >
+                              <WarningRounded
+                                style={{ color: "red", marginRight: 10 }}
+                              />
+                              PRESENTE IL {xylella.observation_date}
+                            </Button>
+                            <Modal
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                              open={props.open}
+                              onClose={props.handleClose}
+                              aria-labelledby="modal-title"
+                              aria-describedby="modal-description"
+                            >
+                              <Box
+                                sx={{
+                                  width: "75%",
+                                  height: "75%",
+                                  bgcolor: "background.paper",
+                                  border: "2px solid #000",
+                                  boxShadow: 24,
+                                  p: 4,
+                                  position: "absolute",
+                                  top: "50%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                }}
+                              >
+                                <Typography
+                                  id="modal-title"
+                                  variant="h6"
+                                  component="h2"
+                                >
+                                  Albero AV {xylella.tree}: Analisi xylella
+                                  fastidiosa
+                                </Typography>
+                                <Typography
+                                  id="modal-description"
+                                  sx={{ mt: 2, height: "90%" }}
+                                >
+                                  <DataGrid
+                                    rows={props.analysisData}
+                                    columns={columns}
+                                    components={{ Toolbar: GridToolbar }}
+                                  />
+                                </Typography>
+                              </Box>
+                            </Modal>
+                          </React.Fragment>
+                        );
+                      } else {
+                        return (
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            sx={{ mt: 1 }}
+                            onClick={() =>
+                              props.handleXylellaClick(xylella.tree)
+                            }
+                          >
+                            <CheckRounded
+                              style={{ color: "green", marginRight: 10 }}
+                            />
+                            ASSENTE IL {xylella.observation_date}
+                          </Button>
+                        );
+                      }
+                    }
+                  })
                 }
               </p>
             </div>

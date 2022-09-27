@@ -24,7 +24,7 @@ const NavBar = (props) => {
         .then((response) => {
           if (value.length === 1 && response.data.series.length === 0) {
             props.setChartDataMetabolitics(null);
-            props.setIsLoadingCultivar(false);
+            props.setIsLoading(false);
             return;
           }
           const state = {
@@ -48,18 +48,18 @@ const NavBar = (props) => {
             series: response.data.series,
           };
           props.setChartDataMetabolitics(state);
-          props.setIsLoadingCultivar(false);
+          props.setIsLoading(false);
         })
         .catch((error) => {
           console.log(error.response);
         })
         .finally(() => {
-          props.setIsLoadingCultivar(false);
+          props.setIsLoading(false);
         });
     } else {
       if (props.chartDataMetabolitics !== null) {
         props.setChartDataMetabolitics(null);
-        props.setIsLoadingCultivar(false);
+        props.setIsLoading(false);
       }
     }
   };
@@ -71,7 +71,7 @@ const NavBar = (props) => {
         .then((response) => {
           if (value.length === 1 && response.data.series.length === 0) {
             props.setChartDataTree(null);
-            props.setIsLoadingCultivar(false);
+            props.setIsLoading(false);
             return;
           }
           const state = {
@@ -95,18 +95,18 @@ const NavBar = (props) => {
             series: response.data.series,
           };
           props.setChartDataTree(state);
-          props.setIsLoadingCultivar(false);
+          props.setIsLoading(false);
         })
         .catch((error) => {
           console.log(error.response);
         })
         .finally(() => {
-          props.setIsLoadingCultivar(false);
+          props.setIsLoading(false);
         });
     } else {
       if (props.chartDataTree !== null) {
         props.setChartDataTree(null);
-        props.setIsLoadingCultivar(false);
+        props.setIsLoading(false);
       }
     }
   };
@@ -331,7 +331,7 @@ const NavBar = (props) => {
                     </div>
                     onChange={(event, newValue) => {
                       colorhandler(newValue);
-                      props.setIsLoadingCultivar(true);
+                      props.setIsLoading(true);
                       setTagColorList(newValue);
                       const metaList = [];
                       const metacolorList = [];
@@ -363,7 +363,7 @@ const NavBar = (props) => {
                           variant="outlined"
                           size="small"
                           onDelete={() => {
-                            props.setIsLoadingCultivar(true);
+                            props.setIsLoading(true);
                             const metaList = tagColorList.filter(
                               (item) => item.cod_met !== option.cod_met
                             );
