@@ -29,8 +29,7 @@ const Core = () => {
         "http://nemesi-project.it/api/v1/analysis-xf/?tree=" + id
       );
 
-      console.log(response.data.results);
-      setAnalysisData(response.data.results);
+      setAnalysisData(response.data);
     };
     getAnalysis(id);
     setIsLoading(false);
@@ -42,7 +41,6 @@ const Core = () => {
         mapType={mapType}
         setMapType={setMapType}
         setIsLoading={setIsLoading}
-        setElNumber={setElNumber}
         setChartDataMetabolitics={setChartDataMetabolitics}
         setChartDataTree={setChartDataTree}
         setMetacolor={setMetacolor}
@@ -67,6 +65,7 @@ const Core = () => {
             setIsLoading={setIsLoading}
             isLoading={isLoading}
             mapType={mapType}
+            setElNumber={setElNumber}
             elNumber={elNumber}
             chartDataMetabolitics={chartDataMetabolitics}
             chartDataTree={chartDataTree}
@@ -79,8 +78,17 @@ const Core = () => {
           />
         </Col>
         <Col md={8}>
-          <TreeTable metacolor={metacolor} tableData={tableData} />
-          <TreeChart tableData={tableData} />
+          <TreeTable
+            metacolor={metacolor}
+            tableData={tableData}
+            elNumber={elNumber}
+            setElNumber={setElNumber}
+          />
+          <TreeChart
+            tableData={tableData}
+            elNumber={elNumber}
+            setElNumber={setElNumber}
+          />
         </Col>
       </Row>
     </React.Fragment>

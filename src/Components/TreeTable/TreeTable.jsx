@@ -2,6 +2,7 @@ import React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Chip from "@mui/material/Chip";
 import Style from "./TreeTable.module.css";
+import Button from "@mui/material/Button";
 
 const TreeTable = (props) => {
   function colorhandler(color) {
@@ -64,23 +65,61 @@ const TreeTable = (props) => {
   } else {
     rows = [];
   }
-
-  return (
-    <div
-      style={{
-        paddingLeft: "10px",
-        marginBottom: "25px",
-        height: 400,
-        width: "100%",
-      }}
-    >
-      <DataGrid
-        columns={columns}
-        rows={rows}
-        components={{ Toolbar: GridToolbar }}
-      />
-    </div>
-  );
+  if (props.elNumber === 0) {
+    return (
+      <div
+        style={{
+          paddingLeft: "10px",
+          marginBottom: "25px",
+          height: 400,
+          width: "100%",
+        }}
+      >
+        <DataGrid
+          columns={columns}
+          rows={rows}
+          components={{ Toolbar: GridToolbar }}
+        />
+      </div>
+    );
+  } else if (props.elNumber === 1) {
+    return (
+      <React.Fragment>
+        <div
+          style={{
+            marginTop: "25px",
+            paddingLeft: "10px",
+            marginBottom: "25px",
+            height: 400,
+            width: "100%",
+          }}
+        >
+          <DataGrid
+            columns={columns}
+            rows={rows}
+            components={{ Toolbar: GridToolbar }}
+          />
+        </div>
+        <Button
+          variant="outlined"
+          color="primary"
+          style={{
+            marginLeft: "25px",
+            marginBottom: "25px",
+            height: "40px",
+            width: "250px",
+          }}
+          onClick={() => {
+            props.setElNumber(2);
+          }}
+        >
+          Visualizza il grafico
+        </Button>
+      </React.Fragment>
+    );
+  } else {
+    return null;
+  }
 };
 
 export default TreeTable;

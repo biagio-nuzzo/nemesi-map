@@ -1,6 +1,7 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
 import Style from "./TreeChart.module.css";
+import Button from "@mui/material/Button";
 
 const TreeChart = (props) => {
   const options = {
@@ -33,43 +34,70 @@ const TreeChart = (props) => {
       ];
     });
   }
-  
 
-  return (
-    <div
-      style={{
-        paddingLeft: "10px",
-        marginBottom: "25px",
-        height: 400,
-        width: "100%",
-      }}
-    >
-      {props.tableData !== null ? (
-        props.tableData !== undefined ? (
-          <ReactApexChart
-            type="line"
-            stacked="false"
-            options={options}
-            series={series}
-          />
-        ) : (
-          <div
-            className={Style.mapDescriptionContainer}
-            style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
-          >
-            Seleziona un metabolita valido per visualizzare il grafico
-          </div>
-        )
-      ) : (
+  if (props.elNumber === 2) {
+    return (
+      <React.Fragment>
         <div
-          className={Style.mapDescriptionContainer}
-          style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
+          style={{
+            marginTop: "25px",
+            paddingLeft: "10px",
+            marginBottom: "25px",
+            height: 400,
+            width: "100%",
+          }}
         >
-          Seleziona un metabolita valido per visualizzare il grafico
+          {props.tableData !== null ? (
+            props.tableData !== undefined ? (
+              <ReactApexChart
+                type="line"
+                stacked="false"
+                options={options}
+                series={series}
+                width="100%"
+                height="420px"
+              />
+            ) : (
+              <div
+                className={Style.mapDescriptionContainer}
+                style={{
+                  width: "100%",
+                  paddingLeft: "5px",
+                  paddingRigth: "5px",
+                }}
+              >
+                Seleziona un metabolita valido per visualizzare il grafico
+              </div>
+            )
+          ) : (
+            <div
+              className={Style.mapDescriptionContainer}
+              style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
+            >
+              Seleziona un metabolita valido per visualizzare il grafico
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  );
+        <Button
+          variant="outlined"
+          color="primary"
+          style={{
+            marginLeft: "25px",
+            marginBottom: "25px",
+            height: "40px",
+            width: "250px",
+          }}
+          onClick={() => {
+            props.setElNumber(1);
+          }}
+        >
+          Visualizza la tabella
+        </Button>
+      </React.Fragment>
+    );
+  } else {
+    return null;
+  }
 };
 
 export default TreeChart;

@@ -48,6 +48,11 @@ export default function BasicTabs(props) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if (newValue === 3) {
+      props.setElNumber(1);
+    } else {
+      props.setElNumber(0);
+    }
   };
 
   function getXfPresence(params) {
@@ -85,10 +90,6 @@ export default function BasicTabs(props) {
     { field: "laboratory", headerName: "Laboratorio", width: 120 },
     { field: "lab_technician", headerName: "Tecnico laboratorio", width: 140 },
   ];
-
-  // let rows = [];
-  if (props.analysis !== null) {
-  }
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -211,7 +212,12 @@ export default function BasicTabs(props) {
           </div>
         )}
       </TabPanel>
-      <TabPanel className={Style.treeDescContainer} value={value} index={3}>
+      <TabPanel
+        className={Style.treeDescContainer}
+        value={value}
+        index={3}
+        // style={{ position: "absolute" }}
+      >
         {props.treeSelected ? (
           <React.Fragment>
             <div className={Style.treeDescContent}>
@@ -314,7 +320,7 @@ export default function BasicTabs(props) {
               >
                 {props.treeSelected.xylella &&
                   props.treeSelected.xylella.map((xylella) => {
-                    if (xylella.tree === props.treeSelected.id) {
+                    if (xylella.tree_id === props.treeSelected.id) {
                       if (xylella.xf_presence === true) {
                         return (
                           <React.Fragment>
@@ -323,12 +329,14 @@ export default function BasicTabs(props) {
                               color="primary"
                               sx={{ mt: 1 }}
                               onClick={() =>
-                                props.handleXylellaClick(xylella.tree)
+                                props.handleXylellaClick(xylella.tree_id)
+                              }
+                              startIcon={
+                                <WarningRounded
+                                  style={{ color: "red" }}
+                                />
                               }
                             >
-                              <WarningRounded
-                                style={{ color: "red", marginRight: 10 }}
-                              />
                               PRESENTE IL {xylella.observation_date}
                             </Button>
                             <Modal
@@ -361,7 +369,7 @@ export default function BasicTabs(props) {
                                   variant="h6"
                                   component="h2"
                                 >
-                                  Albero AV {xylella.tree}: Analisi xylella
+                                  Albero AV {xylella.tree_id}: Analisi xylella
                                   fastidiosa
                                 </Typography>
                                 <Typography
@@ -385,19 +393,20 @@ export default function BasicTabs(props) {
                             color="primary"
                             sx={{ mt: 1 }}
                             onClick={() =>
-                              props.handleXylellaClick(xylella.tree)
+                              props.handleXylellaClick(xylella.tree_id)
+                            }
+                            startIcon={
+                              <CheckRounded
+                                style={{ color: "green" }}
+                              />
                             }
                           >
-                            <CheckRounded
-                              style={{ color: "green", marginRight: 10 }}
-                            />
                             ASSENTE IL {xylella.observation_date}
                           </Button>
                         );
                       }
                     }
-                  })
-                }
+                  })}
               </p>
             </div>
           </React.Fragment>
