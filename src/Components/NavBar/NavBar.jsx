@@ -118,15 +118,47 @@ const NavBar = (props) => {
         .then((response) => {
           if (value.length === 1 && response.data.length === 0) {
             props.setTableData(null);
+            props.setIsLoading(false);
           }
           props.setTableData(response.data);
+          props.setIsLoading(false);
         })
         .catch((error) => {
           console.log(error.response);
+        })
+        .finally(() => {
+          props.setIsLoading(false);
         });
     } else {
       if (props.tableData !== null) {
         props.setTableData(null);
+        props.setIsLoading(false);
+      }
+    }
+  };
+
+  const getMonthData = async (value) => {
+    if (value.length > 0) {
+      await axios
+        .get("http://nemesi-project.it/api/v1/monthly-data/?metabolites=" + value)
+        .then((response) => {
+          if (value.length === 1 && response.data.length === 0) {
+            props.setMonthData(null);
+            props.setIsLoading(false);
+          }
+          props.setMonthData(response.data);
+          props.setIsLoading(false);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        })
+        .finally(() => {
+          props.setIsLoading(false);
+        });
+    } else {
+      if (props.monthData !== null) {
+        props.setMonthData(null);
+        props.setIsLoading(false);
       }
     }
   };
@@ -288,6 +320,7 @@ const NavBar = (props) => {
                     props.setChartDataMetabolitics(null);
                     props.setChartDataTree(null);
                     props.setTableData(null);
+                    props.setMonthData(null);
                   }}
                 >
                   <MenuItem value={mapTypeDict.presence.value}>
@@ -342,6 +375,7 @@ const NavBar = (props) => {
                       getChartData(metaList, metacolorList);
                       getTreeData(metaList, metacolorList);
                       getTableData(metaList);
+                      getMonthData(metaList);
                     }}
                     getOptionLabel={(option) => {
                       return "Metabolita " + option.cod_met;
@@ -377,6 +411,7 @@ const NavBar = (props) => {
                             getChartData(metaList2, metacolorList);
                             getTreeData(metaList2, metacolorList);
                             getTableData(metaList2);
+                            getMonthData(metaList2);
                             props.setMetacolor(metaList);
                           }}
                         />

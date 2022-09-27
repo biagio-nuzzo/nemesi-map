@@ -16,6 +16,7 @@ const Core = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [metacolor, setMetacolor] = useState([]);
   const [tableData, setTableData] = useState(null);
+  const [monthData, setMonthData] = useState(null);
   const [analysisData, setAnalysisData] = useState([]);
   const [open, setOpen] = useState(false);
 
@@ -45,6 +46,7 @@ const Core = () => {
         setChartDataTree={setChartDataTree}
         setMetacolor={setMetacolor}
         setTableData={setTableData}
+        setMonthData={setMonthData}
       />
       <Row>
         <Col md={8} style={{ padding: "0px" }}>
@@ -85,9 +87,11 @@ const Core = () => {
             setElNumber={setElNumber}
           />
           <TreeChart
-            tableData={tableData}
+            metacolor={metacolor}
             elNumber={elNumber}
             setElNumber={setElNumber}
+            setMonthData={setMonthData}
+            monthData={monthData}
           />
         </Col>
       </Row>

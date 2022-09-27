@@ -4,34 +4,44 @@ import Style from "./TreeChart.module.css";
 import Button from "@mui/material/Button";
 
 const TreeChart = (props) => {
-  const options = {
-    xaxis: {
-      categories: [
-        "GEN",
-        "FEB",
-        "MAR",
-        "APR",
-        "MAG",
-        "GIU",
-        "LUG",
-        "AGO",
-        "SET",
-        "OTT",
-        "NOV",
-        "DIC",
-      ],
-    },
-  };
+
+  function colorhandler(color) {
+    for (let i = 0; i < props.metacolor.length; i++) {
+      if (color.id === props.metacolor[i].cod_met) {
+        return props.metacolor[i].color;
+      }
+    }
+  }
+
   const series = [];
-  //da definire la chiamata api per ottenere i dati
-  if (props.tableData !== null) {
-    props.tableData.forEach((element) => {
-      const series = [
-        {
-          name: element.cod_met,
-          data: [element.mz],
+  var options = {};
+
+  if (props.monthData && props.monthData !== undefined) {
+    options = {
+      chart: {
+        zoom: {
+          enabled: false,
         },
-      ];
+      },
+      title: {
+        text: "Concentrazione metaboliti",
+        align: "left",
+      },
+      grid: {
+        row: {
+          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          opacity: 0.5,
+        },
+      },  
+      xaxis: {
+        categories: props.monthData.options.xaxis.categories,
+      }
+    }
+    props.monthData.series.forEach((element) => {
+      series.push({
+        name: element.name,
+        data: element.data,
+      });
     });
   }
 
@@ -47,15 +57,15 @@ const TreeChart = (props) => {
             width: "100%",
           }}
         >
-          {props.tableData !== null ? (
-            props.tableData !== undefined ? (
+          {props.monthData &&
+            props.monthData !== undefined ? (
               <ReactApexChart
                 type="line"
                 stacked="false"
+                width="100%"
+                height="420"
                 options={options}
                 series={series}
-                width="100%"
-                height="420px"
               />
             ) : (
               <div
@@ -69,14 +79,7 @@ const TreeChart = (props) => {
                 Seleziona un metabolita valido per visualizzare il grafico
               </div>
             )
-          ) : (
-            <div
-              className={Style.mapDescriptionContainer}
-              style={{ width: "100%", paddingLeft: "5px", paddingRigth: "5px" }}
-            >
-              Seleziona un metabolita valido per visualizzare il grafico
-            </div>
-          )}
+          }
         </div>
         <Button
           variant="outlined"
