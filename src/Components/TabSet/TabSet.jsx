@@ -276,7 +276,7 @@ export default function BasicTabs(props) {
                   : "Nessun metabolita rilevato"}
 
                 <br />
-                <p style={{ fontSize: "18px", fontWeight: 300 }}>
+                <span style={{ fontSize: "18px", fontWeight: 300 }}>
                   Ultima rilevazione:{" "}
                   {props.treeSelected.metabolites.length > 0 ? (
                     <React.Fragment>
@@ -285,7 +285,7 @@ export default function BasicTabs(props) {
                   ) : (
                     "Nessuna rilevazione"
                   )}
-                </p>
+                </span>
               </p>
             </div>
             <hr />

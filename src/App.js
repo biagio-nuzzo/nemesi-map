@@ -16,7 +16,6 @@ const Core = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [metacolor, setMetacolor] = useState([]);
   const [tableData, setTableData] = useState(null);
-  const [monthDataMetabolites, setMonthDataMetabolites] = useState(null);
   const [analysisData, setAnalysisData] = useState([]);
   const [open, setOpen] = useState(false);
 
@@ -51,11 +50,9 @@ const Core = () => {
         <Col md={8} style={{ padding: "0px" }}>
           <NemesiMap
             mapType={mapType}
-            treeSelected={treeSelected}
             setTreeSelected={setTreeSelected}
             metacolor={metacolor}
             chartDataTree={chartDataTree}
-            setMonthDataMetabolites={setMonthDataMetabolites}
             treeSelected={treeSelected}
           />
         </Col>
@@ -78,7 +75,6 @@ const Core = () => {
             handleXylellaClick={handleXylellaClick}
             handleClose={handleClose}
             open={open}
-            setMonthDataMetabolites={setMonthDataMetabolites}
           />
         </Col>
         <Col md={8}>
@@ -94,7 +90,6 @@ const Core = () => {
             elNumber={elNumber}
             setElNumber={setElNumber}
             treeSelected={treeSelected}
-            monthDataMetabolites={monthDataMetabolites}
           />
         </Col>
       </Row>

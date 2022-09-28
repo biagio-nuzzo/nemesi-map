@@ -98,7 +98,6 @@ const NemesiMap = (props) => {
               <CreateMarkers
                 setTreeSelected={props.setTreeSelected}
                 treeSelected={props.treeSelected}
-                setMonthDataMetabolites={props.setMonthDataMetabolites}
                 {...markerData}
               />
             ) : (
@@ -107,7 +106,6 @@ const NemesiMap = (props) => {
                 data={markerData}
                 setTreeSelected={props.setTreeSelected}
                 treeSelected={props.treeSelected}
-                setMonthDataMetabolites={props.setMonthDataMetabolites}
               />
             )}
           </MapContainer>

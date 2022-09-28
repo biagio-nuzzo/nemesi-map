@@ -5,108 +5,90 @@ import Button from "@mui/material/Button";
 
 import axios from "axios";
 
-import { TailSpin } from "react-loading-icons";
-
 const TreeChart = (props) => {
-  const state = {
-    options: {},
-    series: [],
-  };
-
-  const metabolitList = [];
-  var metabolites = "";
 
   const [monthData, setMonthData] = useState([]);
 
-  useEffect(() => {
-    const getMonthData = async (value, state) => {
-      if (value.length > 0) {
-        props.setIsLoading(true);
-        await axios
-          .get(
-            "http://nemesi-project.it/api/v1/monthly-data/?metabolites=" + value
-          )
-          .then((response) => {
-            if (value.length === 1 && response.data.length === 0) {
-              setMonthData(null);
-              props.setIsLoading(false);
-            }
-            state = {
-              options: {
-                chart: {
-                  type: "line",
-                  height: 420,
-                  zoom: {
-                    enabled: false,
-                  },
-                },
-                markers: {
-                  size: 5,
-                },
-                dataLabels: {
+  useEffect(( ) => {
+    const getMonthData = async (id) => {
+      await axios
+        .get("http://nemesi-project.it/api/v1/monthly-data/?tree=" + id)
+        .then((response) => {
+          if (response.data.length === 0) {
+            setMonthData(null);
+            props.setIsLoading(false);
+          }
+          const state = {
+            options: {
+              chart: {
+                height: 420,
+                type: "line",
+                zoom: {
                   enabled: false,
                 },
-                stroke: {
-                  curve: "straight",
-                },
-                grid: {
-                  row: {
-                    colors: ["#f3f3f3", "transparent"],
-                    opacity: 0.5,
-                  },
-                },
-                yaxis: {
-                  title: {
-                    text: "Concentrazione metaboliti",
-                  },
-                },
-                fill: {
-                  type: "gradient",
-                  gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.7,
-                    opacityTo: 0.9,
-                    stops: [0, 100],
-                  },
-                },
-                xaxis: {
-                  categories: response.data.options.xaxis.categories,
+                animations: {
+                  enabled: false
+                }
+              },
+              markers: {
+                size: 5,
+              },
+              dataLabels: {
+                enabled: false,
+              },
+              stroke: {
+                curve: "straight",
+              },
+              grid: {
+                row: {
+                  colors: ["#f3f3f3", "transparent"],
+                  opacity: 0.5,
                 },
               },
-              series: response.data.series,
-            };
-            setMonthData(state);
-            props.setIsLoading(false);
-          })
-          .catch((error) => {
-            console.log(error.response);
-          })
-          .finally(() => {
-            props.setIsLoading(false);
-          });
-      } else {
-        if (monthData !== null) {
-          setMonthData(null);
+              yaxis: {
+                title: {
+                  text: "Concentrazione metaboliti",
+                },
+              },
+              labels: [
+                "GEN",
+                "FEB",
+                "MAR",
+                "APR",
+                "MAG",
+                "GIU",
+                "LUG",
+                "AGO",
+                "SET",
+                "OTT",
+                "NOV",
+                "DIC",
+              ],
+              xaixs: {
+              },
+            },
+            series: response.data.series,
+          };
+          setMonthData(state);
           props.setIsLoading(false);
-        }
-      }
-    };
-
-    if (props.monthDataMetabolites !== null) {
-      if (props.monthDataMetabolites !== undefined) {
-        props.monthDataMetabolites.map((metabolite) => {
-          metabolitList.push(metabolite.metabolit__id);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        })
+        .finally(() => {
+          props.setIsLoading(false);
         });
-        metabolites = metabolitList.join(",");
-        getMonthData(metabolites, state);
-      }
+      };
+
+    if (props.treeSelected && props.treeSelected !== undefined){
+      getMonthData(props.treeSelected.id);
     }
-  }, [props.monthDataMetabolites]);
+  }, [props.treeSelected]);
 
   if (props.elNumber === 2) {
     return (
       <React.Fragment>
-        <div
+        <div id="chart"
           style={{
             paddingTop: "25px",
             paddingLeft: "10px",
@@ -115,26 +97,13 @@ const TreeChart = (props) => {
             width: "100%",
           }}
         >
-          {monthData !== null ? (
+          {monthData && monthData !== undefined ? (
             <ReactApexChart
               type="line"
-              height="420"
+              height={420}
               options={monthData.options ? monthData.options : {}}
               series={monthData.series ? monthData.series : []}
-            />
-          ) : props.isLoading ? (
-            <div
-              className={Style.loadingContainer}
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                alignContent: "center",
-              }}
-            >
-              <TailSpin stroke="#000" strokeOpacity={1} />
-            </div>
+              />
           ) : (
             <div
               className={Style.mapDescriptionContainer}
