@@ -28,6 +28,7 @@ const CreateMarkers = (props) => {
           click: (e) => {
             map.setView([marker.lat, marker.lon], 20);
             props.setTreeSelected(marker);
+            props.setMonthDataMetabolites(props.treeSelected.metabolites);
           },
           mouseover: (e) => {},
         }}

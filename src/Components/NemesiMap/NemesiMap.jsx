@@ -97,6 +97,8 @@ const NemesiMap = (props) => {
             {props.mapType === "presence" ? (
               <CreateMarkers
                 setTreeSelected={props.setTreeSelected}
+                treeSelected={props.treeSelected}
+                setMonthDataMetabolites={props.setMonthDataMetabolites}
                 {...markerData}
               />
             ) : (
@@ -105,6 +107,7 @@ const NemesiMap = (props) => {
                 data={markerData}
                 setTreeSelected={props.setTreeSelected}
                 treeSelected={props.treeSelected}
+                setMonthDataMetabolites={props.setMonthDataMetabolites}
               />
             )}
           </MapContainer>

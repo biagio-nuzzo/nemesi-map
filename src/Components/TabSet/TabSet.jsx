@@ -45,7 +45,7 @@ function a11yProps(index) {
 
 export default function BasicTabs(props) {
   const [value, setValue] = useState(0);
-
+  
   const handleChange = (event, newValue) => {
     setValue(newValue);
     if (newValue === 3) {
@@ -245,7 +245,7 @@ export default function BasicTabs(props) {
               <p style={{ fontSize: "18px", fontWeight: 300 }}>
                 {props.treeSelected.metabolites.length > 0
                   ? props.treeSelected.metabolites.map((metabolit) => {
-                      let tmpcolor = "f5f5f5";
+                      var tmpcolor = "f5f5f5";
                       if (props.metacolor.length > 0) {
                         for (let i = 0; i < props.metacolor.length; i++) {
                           if (
@@ -297,12 +297,17 @@ export default function BasicTabs(props) {
                 {props.treeSelected.health_status}
               </p>
               <ul>
-                {props.treeSelected.diseases &&
-                  props.treeSelected.diseases.map((disease) => {
-                    return (
-                      <li key={props.treeSelected.id}>{disease.common_name}</li>
-                    );
-                  })}
+                {props.treeSelected.diseases && props.treeSelected.diseases.length > 0
+                  ? props.treeSelected.diseases.map((disease) => {
+                      return (
+                        <li key={disease.id}>
+                          <p style={{ fontSize: "18px", fontWeight: 300 }}>
+                            {disease.common_name}
+                          </p>
+                        </li>
+                      );
+                    })
+                  : "Nessuna malattia rilevata"}
               </ul>
             </div>
             <hr />
@@ -332,9 +337,7 @@ export default function BasicTabs(props) {
                                 props.handleXylellaClick(xylella.tree_id)
                               }
                               startIcon={
-                                <WarningRounded
-                                  style={{ color: "red" }}
-                                />
+                                <WarningRounded style={{ color: "red" }} />
                               }
                             >
                               PRESENTE IL {xylella.observation_date}
@@ -396,9 +399,7 @@ export default function BasicTabs(props) {
                               props.handleXylellaClick(xylella.tree_id)
                             }
                             startIcon={
-                              <CheckRounded
-                                style={{ color: "green" }}
-                              />
+                              <CheckRounded style={{ color: "green" }} />
                             }
                           >
                             ASSENTE IL {xylella.observation_date}

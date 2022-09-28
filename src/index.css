@@ -25,6 +25,12 @@ body {
   }
 }
 
+@media screen and (min-width: 768px) {
+  .sideBarContainer{
+    height: 400px;
+  }
+}
+
 #simple-tabpanel-0 div{
   padding: 0px !important;
 }
