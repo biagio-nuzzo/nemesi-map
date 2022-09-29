@@ -45,7 +45,6 @@ function a11yProps(index) {
 
 export default function BasicTabs(props) {
   const [value, setValue] = useState(0);
-  
   const handleChange = (event, newValue) => {
     setValue(newValue);
     if (newValue === 3) {
@@ -297,7 +296,8 @@ export default function BasicTabs(props) {
                 {props.treeSelected.health_status}
               </p>
               <ul>
-                {props.treeSelected.diseases && props.treeSelected.diseases.length > 0
+                {props.treeSelected.diseases &&
+                props.treeSelected.diseases.length > 0
                   ? props.treeSelected.diseases.map((disease) => {
                       return (
                         <li key={disease.id}>
@@ -337,7 +337,10 @@ export default function BasicTabs(props) {
                                 props.handleXylellaClick(xylella.tree_id)
                               }
                               startIcon={
-                                <WarningRounded style={{ color: "red" }} />
+                                <WarningRounded
+                                  style={{ color: "red" }}
+                                  key={xylella.id}
+                                />
                               }
                             >
                               PRESENTE IL {xylella.observation_date}
@@ -391,19 +394,66 @@ export default function BasicTabs(props) {
                         );
                       } else {
                         return (
-                          <Button
-                            variant="outlined"
-                            color="primary"
-                            sx={{ mt: 1 }}
-                            onClick={() =>
-                              props.handleXylellaClick(xylella.tree_id)
-                            }
-                            startIcon={
-                              <CheckRounded style={{ color: "green" }} />
-                            }
-                          >
-                            ASSENTE IL {xylella.observation_date}
-                          </Button>
+                          <React.Fragment>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              sx={{ mt: 1 }}
+                              onClick={() =>
+                                props.handleXylellaClick(xylella.tree_id)
+                              }
+                              startIcon={
+                                <CheckRounded style={{ color: "green" }} />
+                              }
+                            >
+                              ASSENTE IL {xylella.observation_date}
+                            </Button>
+                            <Modal
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                              open={props.open}
+                              onClose={props.handleClose}
+                              aria-labelledby="modal-title"
+                              aria-describedby="modal-description"
+                            >
+                              <Box
+                                sx={{
+                                  width: "75%",
+                                  height: "75%",
+                                  bgcolor: "background.paper",
+                                  border: "2px solid #000",
+                                  boxShadow: 24,
+                                  p: 4,
+                                  position: "absolute",
+                                  top: "50%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                }}
+                              >
+                                <Typography
+                                  id="modal-title"
+                                  variant="h6"
+                                  component="h2"
+                                >
+                                  Albero AV {xylella.tree_id}: Analisi xylella
+                                  fastidiosa
+                                </Typography>
+                                <Typography
+                                  id="modal-description"
+                                  sx={{ mt: 2, height: "90%" }}
+                                >
+                                  <DataGrid
+                                    rows={props.analysisData}
+                                    columns={columns}
+                                    components={{ Toolbar: GridToolbar }}
+                                  />
+                                </Typography>
+                              </Box>
+                            </Modal>
+                          </React.Fragment>
                         );
                       }
                     }
