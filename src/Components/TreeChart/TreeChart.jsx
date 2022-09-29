@@ -216,6 +216,7 @@ const TreeChart = (props) => {
                   }}
                   onClick={() => {
                     if (year !== selectedYearComparison) {
+                      setMonthData(null);
                       setSelectedYear(year);
                       getMonthData(props.treeSelected.id, year);
                     }
@@ -283,6 +284,7 @@ const TreeChart = (props) => {
                         }}
                         onClick={() => {
                           if (year !== selectedYear) {
+                            setMonthDataComparison(null);
                             setSelectedYearComparison(year);
                             getMonthDataComparison(props.treeSelected.id, year);
                           }
