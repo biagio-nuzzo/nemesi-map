@@ -34,9 +34,6 @@ const TreeChart = (props) => {
               zoom: {
                 enabled: false,
               },
-              animations: {
-                enabled: false,
-              },
             },
             markers: {
               size: 5,
@@ -45,7 +42,8 @@ const TreeChart = (props) => {
               enabled: false,
             },
             stroke: {
-              curve: "straight",
+              width: 2,
+              curve: "straight"
             },
             grid: {
               row: {

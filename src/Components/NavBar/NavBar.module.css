@@ -5,24 +5,27 @@
 
 .topNavBar {
   width: 100%;
-  background-color: black;
+  background-color: #222;
+  border-color: #080808;
   color: white;
-  height: 40px;
+  height: 45px;
   display: flex;
   align-items: center;
 }
 
 .goBack {
-  margin-left: 20px;
   margin-right: auto;
+  margin-top: -5px;
+  padding-left: 50px;
 }
 .goBack span {
   margin-left: 5px;
 }
 
 .headerMenu {
-  margin-right: 20px;
   margin-left: auto;
+  margin-top: -5px;
+  padding-right: 50px;
 }
 
 .menuBarContainer {
@@ -46,7 +49,7 @@
 
 .logoImage {
   margin: auto;
-  width: 70%;
+  width: 100%;
   max-width: 280px;
   height: 80%;
 }
@@ -58,4 +61,14 @@
 
 .loaderContainer{
   width: 100%;
+}
+
+.link{
+  color: #9d9d9d;
+  text-decoration: none;
+  font-size:18px;
+}
+
+.link:hover {
+  color: white;
 }
