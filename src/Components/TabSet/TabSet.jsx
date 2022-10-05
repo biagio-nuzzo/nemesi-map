@@ -211,11 +211,7 @@ export default function BasicTabs(props) {
           </div>
         )}
       </TabPanel>
-      <TabPanel
-        className={Style.treeDescContainer}
-        value={value}
-        index={3}
-      >
+      <TabPanel className={Style.treeDescContainer} value={value} index={3}>
         {props.treeSelected ? (
           <React.Fragment>
             <div className={Style.treeDescContent}>
@@ -346,7 +342,7 @@ export default function BasicTabs(props) {
                               }
                             >
                               PRESENTE IL {xylella.observation_date}
-                            </Button> 
+                            </Button>
                             <Modal
                               style={{
                                 display: "flex",

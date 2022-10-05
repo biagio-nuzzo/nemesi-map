@@ -7,7 +7,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faPersonWalkingDashedLineArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import Style from "./NavBar.module.css";
 import Chip from "@mui/material/Chip";
 import { TailSpin } from "react-loading-icons";
@@ -148,7 +151,6 @@ const NavBar = (props) => {
     },
   };
 
-
   const concentrationColorPool = [
     "#D6181B", //red
     "#FDAE61", //yellow
@@ -164,7 +166,10 @@ const NavBar = (props) => {
       const tmpListColor = [...colorPool];
       for (let i = 0; i < newMetabolit.length; i++) {
         for (let j = 0; j < tmpListColor.length; j++) {
-          if (tmpListColor[j].state === "free" && newMetabolit[i].color === null) {
+          if (
+            tmpListColor[j].state === "free" &&
+            newMetabolit[i].color === null
+          ) {
             tmpListColor[j].state = "used";
             newMetabolit[i].color = tmpListColor[j].color;
           }
@@ -244,7 +249,6 @@ const NavBar = (props) => {
     },
   ]);
 
-
   useEffect(() => {
     const getMetabolits = async () => {
       await axios
@@ -259,7 +263,6 @@ const NavBar = (props) => {
 
     getMetabolits();
   }, []);
-
 
   return (
     <React.Fragment>
@@ -339,7 +342,6 @@ const NavBar = (props) => {
                     // </div>
                     onChange={(event, newValue) => {
                       if (newValue.length > 12) {
-                        
                         //clean colorPool
                         const tmpColor = colorPool[0];
                         tmpColor.state = "free";
@@ -381,7 +383,6 @@ const NavBar = (props) => {
                       return option.cod_met === value.cod_met;
                     }}
                     renderTags={(value) => {
-                      console.log(value)
                       return value.map((option, index) => (
                         <Chip
                           key={index}
@@ -395,38 +396,30 @@ const NavBar = (props) => {
                           variant="outlined"
                           size="small"
                           onDelete={() => {
+                            props.setIsLoading(true);
 
-                            // console.log(option);
-                            // setMetabolitList((oldMetabolitList) => {
-                            //   const newValue = [...oldMetabolitList];
-                            //   newValue.find((element) => 
-                            //     element.cod_met === option.cod_met
-                            //   ).color = null;
-                            //   return newValue;
-                            // }
-                            // )
-
-                            
                             setColorPool((prevState) => {
                               const newState = [...prevState];
                               newState.find(
-                                (color) => color.color === option.color
-                                ).state = "free";
+                                (element) => element.color === option.color
+                              ).state = "free";
                               return newState;
                             });
-                            props.setIsLoading(true);
-                            
 
-                            
-                            
+                            setMetabolitList((oldMetabolitList) => {
+                              const newValue = [...oldMetabolitList];
+                              newValue.find(
+                                (element) => element.cod_met === option.cod_met
+                              ).color = null;
+                              return newValue;
+                            });
+
                             const metaList = tagColorList.filter(
                               (item) => item.cod_met !== option.cod_met
                             );
 
-                            
                             colorhandler(metaList);
-                            
-                            
+
                             const metaList2 = [];
                             const metacolorList = [];
                             for (let i = 0; i < metaList.length; i++) {
@@ -438,10 +431,7 @@ const NavBar = (props) => {
                             getTableData(metaList2);
 
                             setTagColorList(metaList);
-                            console.log(metaList);
-                            props.setMetacolor(metaList2);
-                            
-
+                            props.setMetacolor(metaList);
                           }}
                         />
                       ));
