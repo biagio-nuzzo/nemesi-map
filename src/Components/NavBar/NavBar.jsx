@@ -148,7 +148,52 @@ const NavBar = (props) => {
     },
   };
 
-  const colorPool = [
+
+  const concentrationColorPool = [
+    "#D6181B", //red
+    "#FDAE61", //yellow
+    "#A6D96A", //green
+  ];
+
+  function colorhandler(metabolit) {
+    const newMetabolit = [...metabolit];
+    if (props.mapType === "presence") {
+      if (newMetabolit.length < 1) {
+        props.setMetacolor([]);
+      }
+      const tmpListColor = [...colorPool];
+      for (let i = 0; i < newMetabolit.length; i++) {
+        for (let j = 0; j < tmpListColor.length; j++) {
+          if (tmpListColor[j].state === "free" && newMetabolit[i].color === null) {
+            tmpListColor[j].state = "used";
+            newMetabolit[i].color = tmpListColor[j].color;
+          }
+        }
+      }
+      setColorPool(tmpListColor);
+      props.setMetacolor(newMetabolit);
+    } else {
+      if (newMetabolit.length < 1) {
+        props.setMetacolor([]);
+      }
+      for (let i = 0; i < newMetabolit.length; i++) {
+        if (newMetabolit[i].mz === null || newMetabolit[i].mz < 70) {
+          newMetabolit[i].color = concentrationColorPool[2];
+        }
+        if (newMetabolit[i].mz >= 70 && newMetabolit[i].mz < 130) {
+          newMetabolit[i].color = concentrationColorPool[1];
+        }
+        if (newMetabolit[i].mz >= 130) {
+          newMetabolit[i].color = concentrationColorPool[0];
+        }
+      }
+      props.setMetacolor(newMetabolit);
+    }
+  }
+
+  const [metabolitList, setMetabolitList] = useState([]);
+  const [tagColorList, setTagColorList] = useState([]);
+  const [colorPool, setColorPool] = useState([
     {
       color: "#a6cee3",
       state: "free",
@@ -197,51 +242,8 @@ const NavBar = (props) => {
       color: "#fdbf6f",
       state: "free",
     },
-  ];
+  ]);
 
-  const concentrationColorPool = [
-    "#D6181B", //red
-    "#FDAE61", //yellow
-    "#A6D96A", //green
-  ];
-
-  function colorhandler(metabolit) {
-    if (props.mapType === "presence") {
-      const tmpcolor = [];
-      if (metabolit.length < 1) {
-        props.setMetacolor([]);
-      }
-      for (let i = 0; i < metabolit.length; i++) {
-        metabolit[i].color = null;
-        for (let j = 0; j < colorPool.length; j++) {
-          if (colorPool[j].state === "free" && metabolit[i].color === null) {
-            colorPool[j].state = "used";
-            metabolit[i].color = colorPool[j].color;
-            tmpcolor.push(metabolit[i]);
-          }
-        }
-      }
-      props.setMetacolor(tmpcolor);
-    } else {
-      if (metabolit.length < 1) {
-        props.setMetacolor([]);
-      }
-      for (let i = 0; i < metabolit.length; i++) {
-        if (metabolit[i].mz === null || metabolit[i].mz < 70) {
-          metabolit[i].color = concentrationColorPool[2];
-        }
-        if (metabolit[i].mz >= 70 && metabolit[i].mz < 130) {
-          metabolit[i].color = concentrationColorPool[1];
-        }
-        if (metabolit[i].mz >= 130) {
-          metabolit[i].color = concentrationColorPool[0];
-        }
-      }
-      props.setMetacolor(metabolit);
-    }
-  }
-
-  const [metabolitList, setMetabolitList] = useState([]);
 
   useEffect(() => {
     const getMetabolits = async () => {
@@ -258,7 +260,6 @@ const NavBar = (props) => {
     getMetabolits();
   }, []);
 
-  const [tagColorList, setTagColorList] = useState([]);
 
   return (
     <React.Fragment>
@@ -294,8 +295,8 @@ const NavBar = (props) => {
                     props.setChartDataMetabolitics(null);
                     props.setChartDataTree(null);
                     props.setTableData(null);
-                    props.setMonthData(null);
                   }}
+                  sx={{ fontFamily: "Titillium Web" }}
                 >
                   <MenuItem value={mapTypeDict.presence.value}>
                     {mapTypeDict.presence.label}
@@ -322,33 +323,56 @@ const NavBar = (props) => {
                     id="tags-standard"
                     options={metabolitList}
                     value={tagColorList}
-                    getOptionDisabled={(option) => tagColorList.length >= 12}
+                    getOptionDisabled={(option) => tagColorList.length >= 13}
                     loading={metabolitList < 1}
-                    loadingText=<div
-                      className={Style.loadingContainer}
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        alignContent: "center",
-                      }}
-                    >
-                      <TailSpin stroke="#000" strokeOpacity={1} />
-                    </div>
+                    // loadingText=<div
+                    //   className={Style.loadingContainer}
+                    //   style={{
+                    //     width: "100%",
+                    //     display: "flex",
+                    //     justifyContent: "center",
+                    //     alignItems: "center",
+                    //     alignContent: "center",
+                    //   }}
+                    // >
+                    //   <TailSpin stroke="#000" strokeOpacity={1} />
+                    // </div>
                     onChange={(event, newValue) => {
-                      colorhandler(newValue);
-                      props.setIsLoading(true);
-                      setTagColorList(newValue);
-                      const metaList = [];
-                      const metacolorList = [];
-                      for (let i = 0; i < newValue.length; i++) {
-                        metaList.push(newValue[i].id).toString();
-                        metacolorList.push(newValue[i].color).toString();
+                      if (newValue.length > 12) {
+                        
+                        //clean colorPool
+                        const tmpColor = colorPool[0];
+                        tmpColor.state = "free";
+                        colorPool.shift();
+                        colorPool.push(tmpColor);
+                        newValue.shift();
+                        //add new metabolita
+                        colorhandler(newValue);
+                        props.setIsLoading(true);
+                        setTagColorList(newValue);
+                        const metaList = [];
+                        const metacolorList = [];
+                        for (let i = 0; i < newValue.length; i++) {
+                          metaList.push(newValue[i].id).toString();
+                          metacolorList.push(newValue[i].color).toString();
+                        }
+                        getChartData(metaList, metacolorList);
+                        getTreeData(metaList, metacolorList);
+                        getTableData(metaList);
+                      } else {
+                        colorhandler(newValue);
+                        props.setIsLoading(true);
+                        setTagColorList(newValue);
+                        const metaList = [];
+                        const metacolorList = [];
+                        for (let i = 0; i < newValue.length; i++) {
+                          metaList.push(newValue[i].id).toString();
+                          metacolorList.push(newValue[i].color).toString();
+                        }
+                        getChartData(metaList, metacolorList);
+                        getTreeData(metaList, metacolorList);
+                        getTableData(metaList);
                       }
-                      getChartData(metaList, metacolorList);
-                      getTreeData(metaList, metacolorList);
-                      getTableData(metaList);
                     }}
                     getOptionLabel={(option) => {
                       return "Metabolita " + option.cod_met;
@@ -357,6 +381,7 @@ const NavBar = (props) => {
                       return option.cod_met === value.cod_met;
                     }}
                     renderTags={(value) => {
+                      console.log(value)
                       return value.map((option, index) => (
                         <Chip
                           key={index}
@@ -370,11 +395,38 @@ const NavBar = (props) => {
                           variant="outlined"
                           size="small"
                           onDelete={() => {
+
+                            // console.log(option);
+                            // setMetabolitList((oldMetabolitList) => {
+                            //   const newValue = [...oldMetabolitList];
+                            //   newValue.find((element) => 
+                            //     element.cod_met === option.cod_met
+                            //   ).color = null;
+                            //   return newValue;
+                            // }
+                            // )
+
+                            
+                            setColorPool((prevState) => {
+                              const newState = [...prevState];
+                              newState.find(
+                                (color) => color.color === option.color
+                                ).state = "free";
+                              return newState;
+                            });
                             props.setIsLoading(true);
+                            
+
+                            
+                            
                             const metaList = tagColorList.filter(
                               (item) => item.cod_met !== option.cod_met
                             );
-                            setTagColorList(metaList);
+
+                            
+                            colorhandler(metaList);
+                            
+                            
                             const metaList2 = [];
                             const metacolorList = [];
                             for (let i = 0; i < metaList.length; i++) {
@@ -384,7 +436,12 @@ const NavBar = (props) => {
                             getChartData(metaList2, metacolorList);
                             getTreeData(metaList2, metacolorList);
                             getTableData(metaList2);
-                            props.setMetacolor(metaList);
+
+                            setTagColorList(metaList);
+                            console.log(metaList);
+                            props.setMetacolor(metaList2);
+                            
+
                           }}
                         />
                       ));

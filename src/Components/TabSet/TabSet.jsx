@@ -215,7 +215,6 @@ export default function BasicTabs(props) {
         className={Style.treeDescContainer}
         value={value}
         index={3}
-        // style={{ position: "absolute" }}
       >
         {props.treeSelected ? (
           <React.Fragment>
@@ -244,7 +243,7 @@ export default function BasicTabs(props) {
               <p style={{ fontSize: "18px", fontWeight: 300 }}>
                 {props.treeSelected.metabolites.length > 0
                   ? props.treeSelected.metabolites.map((metabolit) => {
-                      var tmpcolor = "f5f5f5";
+                      var tmpcolor = "#f5f5f5";
                       if (props.metacolor.length > 0) {
                         for (let i = 0; i < props.metacolor.length; i++) {
                           if (
@@ -252,6 +251,8 @@ export default function BasicTabs(props) {
                             props.metacolor[i].cod_met
                           ) {
                             tmpcolor = props.metacolor[i].color;
+                          } else {
+                            // tmpcolor = "#f5f5f5";
                           }
                         }
                       }
@@ -330,6 +331,7 @@ export default function BasicTabs(props) {
                         return (
                           <React.Fragment>
                             <Button
+                              key={xylella.id}
                               variant="outlined"
                               color="primary"
                               sx={{ mt: 1 }}
@@ -344,7 +346,7 @@ export default function BasicTabs(props) {
                               }
                             >
                               PRESENTE IL {xylella.observation_date}
-                            </Button>
+                            </Button> 
                             <Modal
                               style={{
                                 display: "flex",
@@ -396,6 +398,7 @@ export default function BasicTabs(props) {
                         return (
                           <React.Fragment>
                             <Button
+                              key={xylella.id}
                               variant="outlined"
                               color="primary"
                               sx={{ mt: 1 }}
